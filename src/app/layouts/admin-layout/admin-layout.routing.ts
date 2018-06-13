@@ -54,7 +54,7 @@ export const AdminLayoutRoutes: Routes = [
     // }
     { path: 'dashboard',      component: DashboardComponent,
         children: [{
-            path: 'dashboard',
+            path: '',
             loadChildren: '../../dashboard/dashboard.module#DashboardModule'
         }]
     },
