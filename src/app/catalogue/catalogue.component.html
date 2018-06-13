@@ -1,0 +1,37 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field>
+          <input matInput [(ngModel)]="item.name" placeholder="Name">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput [(ngModel)]="item.description" placeholder="Description">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput [(ngModel)]="item.barcodeId" placeholder="Barcode Id">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput [(ngModel)]="item.sku" placeholder="Sku">
+        </mat-form-field>
+      </div>
+      <div class="col-md-6">
+        <mat-form-field>
+          <input matInput [(ngModel)]="item.shopId" placeholder="ShopId">
+        </mat-form-field>
+        <mat-form-field>
+          <input type="number" matInput [(ngModel)]="item.basePrice" placeholder="Base Price">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-select [(ngModel)]="item.sellingType" placeholder="Selling Type">
+            <mat-option value="OPEN">OPEN</mat-option>
+            <mat-option value="HIDDEN">HIDDEN</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class = "row">
+        <button mat-raised-button (click)="saveItem()">Save</button>
+    </div>
+  </div>
+</div>
