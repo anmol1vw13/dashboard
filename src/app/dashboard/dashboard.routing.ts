@@ -4,8 +4,8 @@ import { CatalogueComponent } from "../catalogue/catalogue.component";
 import { CatalogueItemsComponent } from '../catalogue-items/catalogue-items.component';
 
 
-export const DashboardRoutes : Routes = [{
-    path: 'addItem', component: CatalogueComponent
-}, {
-    path: 'viewItem', component: CatalogueItemsComponent
-}]
+export const DashboardRoutes : Routes = [
+    {path: '',component: CatalogueComponent},
+    {path: 'addItem', component: CatalogueComponent},
+    {path: 'viewItem', component: CatalogueItemsComponent}
+]
