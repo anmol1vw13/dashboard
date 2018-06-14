@@ -6,6 +6,11 @@ import { FormsModule } from "@angular/forms";
 import { MatButtonModule, MatRippleModule, MatInputModule, MatTooltipModule, MatFormFieldModule, MatOptionModule, MatSelectModule } from "@angular/material";
 import { HttpClientModule } from "@angular/common/http";
 import { DashboardRoutes } from "./dashboard.routing";
+import { CatalogueItemsComponent } from "../catalogue-items/catalogue-items.component";
+import {MatTableModule} from '@angular/material/table';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
+
+
 
 @NgModule({
     imports: [CommonModule,
@@ -18,9 +23,14 @@ import { DashboardRoutes } from "./dashboard.routing";
         MatFormFieldModule,
         MatOptionModule,
         MatSelectModule,
-        HttpClientModule],
+        HttpClientModule,
+        MatTableModule,
+        Ng2SmartTableModule
+    
+    ],
     declarations: [
-        CatalogueComponent
+        CatalogueComponent,
+        CatalogueItemsComponent
     ]
 })
 
