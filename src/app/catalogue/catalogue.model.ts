@@ -6,4 +6,11 @@ export class Item {
     basePrice:number
     sellingType:string
     type:string="ITEM"
+    optionIds?:number[]
+}
+
+
+export class CatalogueSearchRequest {
+    name : string
+    shopId : string
 }

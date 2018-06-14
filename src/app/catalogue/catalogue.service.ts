@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Item } from './catalogue.model';
-import { API_ENDPOINT, addItem } from 'config/config';
+import { Item, CatalogueSearchRequest } from './catalogue.model';
+import { API_ENDPOINT, addItem, searchOption } from 'config/config';
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/observable/throw';
@@ -28,5 +28,15 @@ export class CatalogueService {
       })
 
   }
+
+  searchOption(data: CatalogueSearchRequest){
+    return this.http.post(searchOption, data, {headers: this.headers})
+    .map((res:Response) => {
+      return res;
+    }).catch((err:any) =>{
+      return Observable.throw(err)
+    })
+  }
+
 
 }

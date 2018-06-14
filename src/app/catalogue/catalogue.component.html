@@ -28,10 +28,23 @@
             <mat-option value="HIDDEN">HIDDEN</mat-option>
           </mat-select>
         </mat-form-field>
+
+        <mat-form-field>
+          <input type="text" matInput (keyup)="searchOption($event)" [matAutocomplete]="auto">
+          <span></span>
+        </mat-form-field>
+
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectOption($event)" [displayWith]="displayOption">
+          <mat-option *ngFor="let option of options" [value]="option">{{option.name}}</mat-option>
+        </mat-autocomplete>
+
+        <mat-list>
+          <mat-list-item *ngFor="let option of selectedOptions" >{{option.name}} <span><i class="material-icons" style="cursor:pointer" (click)="removeOption(option.id)">delete</i></span></mat-list-item>
+        </mat-list>
       </div>
     </div>
-    <div class = "row">
-        <button mat-raised-button (click)="saveItem()">Save</button>
+    <div class="row">
+      <button mat-raised-button (click)="saveItem()">Save</button>
     </div>
   </div>
 </div>
