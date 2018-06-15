@@ -2,14 +2,15 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { CatalogueComponent } from "../catalogue/catalogue.component";
 import { RouterModule } from "@angular/router";
-import { FormsModule } from "@angular/forms";
-import { MatButtonModule, MatRippleModule, MatInputModule, MatTooltipModule, MatFormFieldModule, MatOptionModule, MatSelectModule, MatListModule } from "@angular/material";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatButtonModule, MatRippleModule, MatInputModule, MatTooltipModule, MatFormFieldModule, MatOptionModule, MatSelectModule, MatListModule, MatCardModule } from "@angular/material";
 import { HttpClientModule } from "@angular/common/http";
 import { DashboardRoutes } from "./dashboard.routing";
 import { CatalogueItemsComponent } from "../catalogue-items/catalogue-items.component";
 import {MatTableModule} from '@angular/material/table';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+
 
 
 
@@ -29,7 +30,9 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
         MatTableModule,
         Ng2SmartTableModule,
         MatAutocompleteModule,
-        MatListModule
+        MatListModule,
+        ReactiveFormsModule,
+        MatCardModule
     ],
     declarations: [
         CatalogueComponent,
