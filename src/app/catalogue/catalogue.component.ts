@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Item, CatalogueSearchRequest } from './catalogue.model';
 import { CatalogueService } from './catalogue.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { ItemFlowComponent } from '../item-flow/item-flow.component';
+
 
 @Component({
   selector: 'app-catalogue',
@@ -20,7 +23,7 @@ export class CatalogueComponent implements OnInit {
   itemForm = new FormGroup({
 
   })
-  constructor(private _catalogueService: CatalogueService, private formBuilder: FormBuilder) {
+  constructor(private _catalogueService: CatalogueService, private formBuilder: FormBuilder, public dialog: MatDialog) {
     this.createForm()
   }
 
@@ -100,8 +103,8 @@ export class CatalogueComponent implements OnInit {
     this.observableList.push(searchObservable);
   }
 
-  removeSubscriptions(){
-    for(let i = 0; i < this.observableList.length; i++){
+  removeSubscriptions() {
+    for (let i = 0; i < this.observableList.length; i++) {
       this.observableList[i].unsubscribe();
     }
   }
@@ -132,4 +135,13 @@ export class CatalogueComponent implements OnInit {
       }
     });
   }
+
+  openItemFlow() {
+
+    let dialogRef = this.dialog.open(ItemFlowComponent, {
+      height: '400px',
+      width: '600px',
+    });
+  }
+
 }

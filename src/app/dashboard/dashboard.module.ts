@@ -7,12 +7,12 @@ import { MatButtonModule, MatRippleModule, MatInputModule, MatTooltipModule, Mat
 import { HttpClientModule } from "@angular/common/http";
 import { DashboardRoutes } from "./dashboard.routing";
 import { CatalogueItemsComponent } from "../catalogue-items/catalogue-items.component";
-import {MatTableModule} from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-
-
-
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { ItemFlowComponent } from "../item-flow/item-flow.component";
+import { TreeModule } from 'angular-tree-component';
+import { BrowserTransferStateModule } from "@angular/platform-browser";
 
 
 @NgModule({
@@ -32,11 +32,16 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
         MatAutocompleteModule,
         MatListModule,
         ReactiveFormsModule,
-        MatCardModule
+        MatCardModule,
+        TreeModule,
+    ],
+    entryComponents:[
+        ItemFlowComponent
     ],
     declarations: [
         CatalogueComponent,
-        CatalogueItemsComponent
+        CatalogueItemsComponent,
+        ItemFlowComponent
     ]
 })
 

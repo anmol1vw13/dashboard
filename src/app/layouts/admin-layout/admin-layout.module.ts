@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
+
 import { AdminLayoutRoutes } from './admin-layout.routing';
 import { DashboardComponent } from '../../dashboard/dashboard.component';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
@@ -24,7 +25,8 @@ import {
   MatFormFieldModule,
   MatFormField,
   MatOptionModule,
-  MatSelectModule
+  MatSelectModule,
+  MatDialogModule
 } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
 import { DashboardModule } from '../../dashboard/dashboard.module';
@@ -41,7 +43,8 @@ import { DashboardModule } from '../../dashboard/dashboard.module';
     MatOptionModule,
     MatSelectModule,
     HttpClientModule,
-    DashboardModule
+    DashboardModule,
+    MatDialogModule
   ],
   declarations: [
     DashboardComponent,
