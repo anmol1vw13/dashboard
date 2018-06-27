@@ -2,4 +2,4 @@
 <div *ngIf="selectedNode != undefined">
   <p>MRP : {{selectedNode.mrp}} , Selling Price : {{selectedNode.sellingPrice}}</p>
 </div>
-<tree-root [nodes]="nodes" (foucs)="onFocus($event)" [options]="options"></tree-root>
+<tree-root [nodes]="nodes" (focus)="onFocus($event)" [options]="options"></tree-root>

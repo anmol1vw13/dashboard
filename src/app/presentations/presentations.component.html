@@ -1,0 +1,71 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <mat-accordion style="width:100%;" *ngFor="let presentation of presentations">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{presentation.name}}
+            </mat-panel-title>
+            <!-- <mat-panel-description>
+              Type your name and age
+            </mat-panel-description> -->
+          </mat-expansion-panel-header>
+          <div *ngFor="let itemPresentation of presentation.itemPresentations">
+            <span *ngIf="itemPresentation.type == 'DROP_DOWN';else static_content">
+                  <!--  TODO: DROP_DOWN representation-->
+            </span>
+            <ng-template #static_content>
+              <mat-table #table [dataSource]="itemPresentation.items">
+
+
+                <!-- Position Column -->
+                <ng-container matColumnDef="id">
+                  <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
+                  <mat-cell *matCellDef="let item"> {{item.id}} </mat-cell>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                  <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                  <mat-cell *matCellDef="let item"> {{item.name}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="sku">
+                  <mat-header-cell *matHeaderCellDef> Sku </mat-header-cell>
+                  <mat-cell *matCellDef="let item"> {{item.sku}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="basePrice">
+                  <mat-header-cell *matHeaderCellDef> Base Price </mat-header-cell>
+                  <mat-cell *matCellDef="let item"> {{item.basePrice}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="defaultPrice">
+                  <mat-header-cell *matHeaderCellDef> Default Price </mat-header-cell>
+                  <mat-cell *matCellDef="let item"> {{item.defaultPrice}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="expand">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let item">
+                      <button mat-button (click)="expand(item)">Expand</button>
+                      <mat-icon style="top: 6px;position:relative; cursor: pointer;" (click)="deleteItemFromPresentation(presentation.id,item.id)">delete</mat-icon>
+                    </mat-cell>
+                    <mat-cell><button mat-button >Delete</button></mat-cell>
+                </ng-container>
+                
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let item ; columns: displayedColumns;" ></mat-row>
+              </mat-table>
+            </ng-template>
+          </div>
+
+        </mat-expansion-panel>
+      </mat-accordion>
+
+
+    </div>
+  </div>
+</div>

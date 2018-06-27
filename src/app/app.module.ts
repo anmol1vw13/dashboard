@@ -23,6 +23,7 @@ import {
 } from '@agm/core';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { BrowserModule } from '@angular/platform-browser';
+import { PresentationsComponent } from './presentations/presentations.component';
 
 @NgModule({
   imports: [

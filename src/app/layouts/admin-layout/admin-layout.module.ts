@@ -15,6 +15,7 @@ import { MapsComponent } from '../../maps/maps.component';
 import { NotificationsComponent } from '../../notifications/notifications.component';
 import { UpgradeComponent } from '../../upgrade/upgrade.component';
 
+import {MatExpansionModule} from '@angular/material/expansion';
 
 
 import {
@@ -26,10 +27,13 @@ import {
   MatFormField,
   MatOptionModule,
   MatSelectModule,
-  MatDialogModule
+  MatDialogModule,
+  MatTableModule,
+  MatIconModule
 } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
 import { DashboardModule } from '../../dashboard/dashboard.module';
+import { PresentationsComponent } from '../../presentations/presentations.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -44,7 +48,10 @@ import { DashboardModule } from '../../dashboard/dashboard.module';
     MatSelectModule,
     HttpClientModule,
     DashboardModule,
-    MatDialogModule
+    MatDialogModule,
+    MatExpansionModule,
+    MatTableModule,
+    MatIconModule
   ],
   declarations: [
     DashboardComponent,
@@ -54,7 +61,8 @@ import { DashboardModule } from '../../dashboard/dashboard.module';
     IconsComponent,
     MapsComponent,
     NotificationsComponent,
-    UpgradeComponent
+    UpgradeComponent,
+    PresentationsComponent
   ]
 })
 

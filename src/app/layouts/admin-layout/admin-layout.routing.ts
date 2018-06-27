@@ -7,6 +7,7 @@ import { NotificationsComponent } from '../../notifications/notifications.compon
 import { TableListComponent } from '../../table-list/table-list.component';
 import { TypographyComponent } from '../../typography/typography.component';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
+import { PresentationsComponent } from '../../presentations/presentations.component';
 
 
 export const AdminLayoutRoutes: Routes = [
@@ -58,6 +59,10 @@ export const AdminLayoutRoutes: Routes = [
             loadChildren: '../../dashboard/dashboard.module#DashboardModule'
         }]
     },
+    {
+        path: 'presentations',
+        component: PresentationsComponent,
+      }, 
     { path: 'user-profile',   component: UserProfileComponent },
     { path: 'table-list',     component: TableListComponent },
     { path: 'typography',     component: TypographyComponent },
