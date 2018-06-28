@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { getPresentations, removeItemsFromPresentation } from 'config/config';
+import { getPresentations, removeItemsFromPresentation, updatePresentation } from 'config/config';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/catch'
@@ -44,7 +44,14 @@ export class PresentationsService {
       .catch((err: any) => {
         return Observable.throw(err)
       })
-
-
+  }
+  updatePresentation(presentation:any){
+    return this.http.post(updatePresentation, presentation)
+      .map((res: any) => {
+        return res
+      })
+      .catch((err: any) => {
+        return Observable.throw(err)
+      })
   }
 }

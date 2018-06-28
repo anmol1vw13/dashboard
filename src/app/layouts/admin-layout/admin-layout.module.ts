@@ -32,12 +32,18 @@ import {
   MatDialogModule,
   MatTableModule,
   MatIconModule,
-  MatChipsModule
+  MatChipsModule,
+  MatAutocompleteModule,
+  MatCardModule,
+  MatListModule,
+  MatSnackBarModule
 } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
 import { DashboardModule } from '../../dashboard/dashboard.module';
-import { PresentationsComponent } from '../../presentations/presentations.component';
+
+import { PresentationsComponent, AddItemToPresentation } from '../../presentations/presentations.component';
 import { BulkuploadComponent } from '../../bulkupload/bulkupload.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -57,7 +63,16 @@ import { BulkuploadComponent } from '../../bulkupload/bulkupload.component';
     MatTableModule,
     MatIconModule,
     MatChipsModule,
-    HotTableModule
+    HotTableModule,
+    MatAutocompleteModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatCardModule,
+    MatListModule,
+    MatSnackBarModule
+  ],
+  entryComponents: [
+    AddItemToPresentation
   ],
   declarations: [
     DashboardComponent,
@@ -69,7 +84,8 @@ import { BulkuploadComponent } from '../../bulkupload/bulkupload.component';
     NotificationsComponent,
     UpgradeComponent,
     PresentationsComponent,
-    BulkuploadComponent
+    BulkuploadComponent,
+    AddItemToPresentation
   ]
 })
 
