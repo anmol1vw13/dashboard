@@ -8,6 +8,7 @@ import { TableListComponent } from '../../table-list/table-list.component';
 import { TypographyComponent } from '../../typography/typography.component';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
 import { PresentationsComponent } from '../../presentations/presentations.component';
+import { BulkuploadComponent } from '../../bulkupload/bulkupload.component';
 
 
 export const AdminLayoutRoutes: Routes = [
@@ -62,7 +63,8 @@ export const AdminLayoutRoutes: Routes = [
     {
         path: 'presentations',
         component: PresentationsComponent,
-      }, 
+      },
+      {path : 'bulkupload', component: BulkuploadComponent},
     { path: 'user-profile',   component: UserProfileComponent },
     { path: 'table-list',     component: TableListComponent },
     { path: 'typography',     component: TypographyComponent },

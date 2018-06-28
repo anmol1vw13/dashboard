@@ -16,6 +16,8 @@ import { NotificationsComponent } from '../../notifications/notifications.compon
 import { UpgradeComponent } from '../../upgrade/upgrade.component';
 
 import {MatExpansionModule} from '@angular/material/expansion';
+import { HotTableModule } from 'ng2-handsontable';
+
 
 
 import {
@@ -35,6 +37,7 @@ import {
 import { HttpClientModule } from '@angular/common/http';
 import { DashboardModule } from '../../dashboard/dashboard.module';
 import { PresentationsComponent } from '../../presentations/presentations.component';
+import { BulkuploadComponent } from '../../bulkupload/bulkupload.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -53,7 +56,8 @@ import { PresentationsComponent } from '../../presentations/presentations.compon
     MatExpansionModule,
     MatTableModule,
     MatIconModule,
-    MatChipsModule
+    MatChipsModule,
+    HotTableModule
   ],
   declarations: [
     DashboardComponent,
@@ -64,7 +68,8 @@ import { PresentationsComponent } from '../../presentations/presentations.compon
     MapsComponent,
     NotificationsComponent,
     UpgradeComponent,
-    PresentationsComponent
+    PresentationsComponent,
+    BulkuploadComponent
   ]
 })
 

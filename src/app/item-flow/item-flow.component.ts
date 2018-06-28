@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { TREE_ACTIONS, IActionMapping } from 'angular-tree-component';
+import {MAT_DIALOG_DATA} from '@angular/material';
+
 
 
 
@@ -11,37 +13,11 @@ import { TREE_ACTIONS, IActionMapping } from 'angular-tree-component';
 export class ItemFlowComponent implements OnInit {
 
   selectedNode: any;
+  allNodes : any[] = [];
 
-  nodes = [
-    {
-      id: 1,
-      name: 'Thali', "mrp": 100, "sellingPrice": 95,
-      children: [
-        {
-          id: 2, name: 'North Indian Thali', "mrp": 95, "sellingPrice": 90, children: [
-            {
-              id: 5, name: "Roti", "mrp": 100, "sellingPrice": 95, children: [
-                {
-                  id: 8, name: "Butter Naan", "mrp": 80, "sellingPrice": 75,
-                },
-                {
-                  id: 9, name: "Butter Roti", "mrp": 71, "sellingPrice": 69,
-                }
-              ]
-            }, {
-              id: 6, name: "Sweets", "mrp": 100, "sellingPrice": 95, children: [
-                { id: 10, name: "Gulab Jamun", "mrp": 20, "sellingPrice": 18, },
-                { id: 11, name: "Rasagulla", "mrp": 30, "sellingPrice": 17, }
-              ]
-            }, {
-              id: 7, name: "Starters", "mrp": 50, "sellingPrice": 45,
-            }
-          ]
-        },
-        { id: 3, name: 'South Indian Thali', "mrp": 70, "sellingPrice": 65, }
-      ]
-    }
-  ];
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) { }
+
+  nodes : any[] =[]
 
   actionMapping: IActionMapping = {
     mouse: {
@@ -53,10 +29,38 @@ export class ItemFlowComponent implements OnInit {
     actionMapping: this.actionMapping
   };
 
-  constructor() { }
-
   ngOnInit() {
+    console.log(this.data)
+    this.data.item.children = this.getNestedChildren(this.data.item.options)
+    let array = [];
+    array.push(this.data.item);
+    console.log(this.nodes);
+    console.log(array);
+    this.nodes = array;
   }
+
+
+  getNestedChildren(items) {
+      for(let eachItem of items){
+        eachItem.children = [];
+        if(eachItem.type == 'ITEM'){
+          if(eachItem.options!=null){
+            eachItem.children.push(this.getNestedChildren(eachItem.options))
+          } else {
+            return eachItem;
+          }
+        } else {
+          if(eachItem.items!=null){
+            eachItem.children.push(this.getNestedChildren(eachItem.items))
+          } else {
+            return eachItem
+          }
+        }
+    }
+    return items;
+
+    //console.log(this.data.item);
+}
 
   onFocus(event) {
     console.log(event);

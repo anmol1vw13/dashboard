@@ -1,7 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { DataSource } from '@angular/cdk/table';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { PresentationsService } from './presentations.service';
 import { MatTable } from '@angular/material';
+import { ItemFlowComponent } from '../item-flow/item-flow.component';
 
 
 
@@ -17,7 +19,7 @@ export class PresentationsComponent implements OnInit {
   presentations = []
   selectedRowIndexes = []
   @ViewChild(MatTable) table: MatTable<any>;
-  constructor(private _presentationService: PresentationsService, private _changeDetectorRef: ChangeDetectorRef) {
+  constructor(private _presentationService: PresentationsService, private _changeDetectorRef: ChangeDetectorRef, public dialog: MatDialog) {
 
   }
 
@@ -33,37 +35,49 @@ export class PresentationsComponent implements OnInit {
   }
 
   expand(item) {
-    console.log(item)
+    console.log(item);
+    this.openItemFlow(item);
   }
 
 
   deleteItemFromPresentation(presentationId: number, itemId: number, itemPresentation: any) {
 
-    
+
     let foundindex = -1;
-    itemPresentation.items.filter((eachItem : any, index) => {
+    itemPresentation.items.filter((eachItem: any, index) => {
       if (eachItem.id === itemId) {
         foundindex = index;
       }
     })
-    if(foundindex != -1){
+    if (foundindex != -1) {
       let itemIds = [itemId]
-    
-      this._presentationService.removeItemsFromPresentations(presentationId,itemIds).subscribe(data => {
-        
+
+      this._presentationService.removeItemsFromPresentations(presentationId, itemIds).subscribe(data => {
+
         itemPresentation.items.splice(foundindex, 1);
         this.selectedRowIndexes.push(itemId);
       },
-      (err)=>{
-        alert(err);
-      }
-    )
-      
-      
-    } 
-   
+        (err) => {
+          alert(err);
+        }
+      )
+
+
+    }
+
   }
 
-  displayedColumns = ['id', 'name', 'sku', 'basePrice', 'defaultPrice', 'tags','expand'];
+  displayedColumns = ['id', 'name', 'sku', 'basePrice', 'defaultPrice', 'tags', 'expand'];
+
+  openItemFlow(item) {
+
+    let dialogRef = this.dialog.open(ItemFlowComponent, {
+      height: '400px',
+      width: '600px',
+      data : {
+        item : item
+      }
+    });
+  }
 
 }
