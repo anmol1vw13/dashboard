@@ -1,0 +1,26 @@
+.highlight{
+    background: #42A948; /* green */
+}
+
+.right-aligned-header > .mat-content {
+    justify-content: space-between;
+}
+
+.mat-content > mat-panel-title, .mat-content > mat-panel-description {
+  flex: 0 0 auto;
+}
+
+.box-panel-title{
+    width: 20%;
+    margin: auto;
+}
+
+.mat-column-name{
+    flex: 1 0 70px;
+}
+.mat-column-tags{
+    flex: 1 0 70px;
+}
+.mat-column-expand{
+    flex: 1 0 70px;
+}

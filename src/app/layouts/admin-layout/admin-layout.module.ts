@@ -29,7 +29,8 @@ import {
   MatSelectModule,
   MatDialogModule,
   MatTableModule,
-  MatIconModule
+  MatIconModule,
+  MatChipsModule
 } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
 import { DashboardModule } from '../../dashboard/dashboard.module';
@@ -51,7 +52,8 @@ import { PresentationsComponent } from '../../presentations/presentations.compon
     MatDialogModule,
     MatExpansionModule,
     MatTableModule,
-    MatIconModule
+    MatIconModule,
+    MatChipsModule
   ],
   declarations: [
     DashboardComponent,
