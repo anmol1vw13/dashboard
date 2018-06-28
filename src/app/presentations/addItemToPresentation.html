@@ -1,0 +1,62 @@
+<div class="container-fluid">
+
+    <!-- <div (click)="closeDialog()"><mat-icon style="float:right;cursor:pointer;" >clear</mat-icon></div> -->
+    <mat-form-field>
+        <input type="text" [(ngModel)]="itemSearch" matInput placeholder="Search for item" (keyup)="searchItem($event)" [matAutocomplete]="auto">
+       
+    </mat-form-field>
+
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectItem($event)" [displayWith]="displayItem">
+        <mat-option *ngFor="let item of items" [value]="item">{{item.name}},{{item.id}}</mat-option>
+    </mat-autocomplete>
+
+    <div class="col-md-12">
+        <mat-card *ngIf="selectedItems.length>0">
+            <mat-card-header>
+                <mat-card-title>Selected Items
+                    <div style=" float:right; margin-top:-4%; margin-right:-163%;">
+                        <button mat-raised-button (click)="addItemsToPresentation()">Save</button>
+                    </div>
+                </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+
+                <mat-table #selectedItemsTable [dataSource]="selectedItemsDataSource">
+                    <ng-container matColumnDef="id">
+                        <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
+                        <mat-cell *matCellDef="let item"> {{item.id}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="name">
+                        <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                        <mat-cell *matCellDef="let item"> {{item.name}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="sku">
+                        <mat-header-cell *matHeaderCellDef> Sku </mat-header-cell>
+                        <mat-cell *matCellDef="let item"> {{item.sku}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="basePrice">
+                        <mat-header-cell *matHeaderCellDef> Base Price </mat-header-cell>
+                        <mat-cell *matCellDef="let item"> {{item.basePrice}} </mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="delete">
+                        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                        <mat-cell *matCellDef="let item">
+                            <i class="material-icons" style="cursor:pointer" (click)="removeItem(item.id)">delete</i>
+                        </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="selectedItemsDisplayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let item ; columns: selectedItemsDisplayedColumns;"></mat-row>
+
+                </mat-table>
+
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+
+
+</div>

@@ -30,11 +30,15 @@ import {
   MatDialogModule,
   MatTableModule,
   MatIconModule,
-  MatChipsModule
+  MatChipsModule,
+  MatAutocompleteModule,
+  MatCardModule,
+  MatListModule,
+  MatSnackBarModule
 } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
 import { DashboardModule } from '../../dashboard/dashboard.module';
-import { PresentationsComponent } from '../../presentations/presentations.component';
+import { PresentationsComponent, AddItemToPresentation } from '../../presentations/presentations.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -53,7 +57,16 @@ import { PresentationsComponent } from '../../presentations/presentations.compon
     MatExpansionModule,
     MatTableModule,
     MatIconModule,
-    MatChipsModule
+    MatChipsModule,
+    MatAutocompleteModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatCardModule,
+    MatListModule,
+    MatSnackBarModule
+  ],
+  entryComponents: [
+    AddItemToPresentation
   ],
   declarations: [
     DashboardComponent,
@@ -64,7 +77,8 @@ import { PresentationsComponent } from '../../presentations/presentations.compon
     MapsComponent,
     NotificationsComponent,
     UpgradeComponent,
-    PresentationsComponent
+    PresentationsComponent,
+    AddItemToPresentation
   ]
 })
 
