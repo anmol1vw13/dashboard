@@ -1,0 +1,15 @@
+.handsontable{
+    z-index: initial;
+}
+.currentRow {
+    background-color: #F9F9FB !important;
+}
+.currentCol {
+    background-color: #E7E8EF !important;
+}
+.customHandsontable{
+    height: 600px;
+    width: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;  
+}
