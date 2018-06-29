@@ -36,7 +36,8 @@ import {
   MatAutocompleteModule,
   MatCardModule,
   MatListModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatProgressBarModule
 } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
 import { DashboardModule } from '../../dashboard/dashboard.module';
@@ -69,7 +70,8 @@ import { BulkuploadComponent } from '../../bulkupload/bulkupload.component';
     MatFormFieldModule,
     MatCardModule,
     MatListModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatProgressBarModule
   ],
   entryComponents: [
     AddItemToPresentation

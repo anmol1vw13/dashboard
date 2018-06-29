@@ -4,6 +4,9 @@
         <div class="sidebar-background" style="background-image: url(../assets/img/sidebar-4.jpg)"></div>
     </div>
     <div class="main-panel">
+        
+        <!-- <mat-progress-bar mode="indeterminate" [hidden]="false"></mat-progress-bar> -->
+      
         <app-navbar></app-navbar>
         <router-outlet></router-outlet>
         <div *ngIf="isMaps('maps')">

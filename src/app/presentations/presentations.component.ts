@@ -42,7 +42,9 @@ export class PresentationsComponent implements OnInit {
     });
   }
 
-
+  checkParameter(parameterName:String, checkWith:String){
+    return parameterName.toUpperCase() == checkWith.toUpperCase();
+  }
 
   getPresentations() {
 
