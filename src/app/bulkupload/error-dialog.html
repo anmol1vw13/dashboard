@@ -1,0 +1,11 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <h4>Please correct the data in the sheet and press save button</h4>
+        <mat-divider style="margin-bottom: 2%;margin-top: 2%;"></mat-divider>
+        <mat-list>
+            <mat-list-item *ngFor="let eachMessage of data.errData; let i = index">
+                <button mat-raised-button (click)="clickError(eachMessage)" color="warn">{{eachMessage.errMsg}}</button>
+            </mat-list-item>
+        </mat-list>
+    </div>
+</div>

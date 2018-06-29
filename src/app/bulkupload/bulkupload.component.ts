@@ -1,51 +1,222 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation, Inject } from '@angular/core';
+import * as Handsontable from 'handsontable';
+import { HotTableRegisterer } from '@handsontable/angular'
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { BulkUploadService } from './bulkupload.service';
+import { MatSnackBar } from '@angular/material';
+
+
 
 @Component({
   selector: 'app-bulkupload',
   templateUrl: './bulkupload.component.html',
-  styleUrls: ['./bulkupload.component.scss']
+  styleUrls: ['./bulkupload.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  providers: [BulkUploadService]
 })
 export class BulkuploadComponent implements OnInit {
 
+  instance: string = 'hot';
+  mandatoryColumns = ['Product Name*', 'Category*', 'Sku*', 'Product MRP*', 'Shop Price*', 'CGST Rate (%)*', 'SGST Rate (%)*']
+  colHeaders = ['Product Name*', 'Product Description', 'Category*', 'Sku*', 'Product MRP*', 'Shop Price*', 'CGST Rate (%)*', 'SGST Rate (%)*', 'HSN Code', 'Tags'];
+  colWidths = ['200', '200', '150', '150', '150', '150', '150', '150', '150', '200']
+  dataset: any[] = []
+  saving: boolean = false;
 
-  colHeaders = ['SKU', 'Name', 'MRP', 'Selling Price', 'GST Tax']
+  errMsgs: any[] = [];
 
-  colWidths = [200,200,200,200,200]
+  options: any = {
+    stretchH: 'all',
+    minSpareRows: 1,
+    currentRowClassName: 'currentRow',
+    currentColClassName: 'currentCol',
+    width: 1400,
+    height: 700,
+    columns: [
+      {
+        data: 'productName',
+        type: 'text'
+      },
+      {
+        data: 'productDescription',
+        type: 'text'
 
-  data = [ 
-    {'sku' : '123456', 'name': 'Item 1', 'mrp' : '50', 'sellingPrice' : '48', 'tax' : '5%'},
-    {'sku' : '123456', 'name': 'Item 1', 'mrp' : '50', 'sellingPrice' : '48', 'tax' : '5%'},
-    {'sku' : '123456', 'name': 'Item 1', 'mrp' : '50', 'sellingPrice' : '48', 'tax' : '5%'},
-    {'sku' : '123456', 'name': 'Item 1', 'mrp' : '50', 'sellingPrice' : '48', 'tax' : '5%'},
-    {'sku' : '123456', 'name': 'Item 1', 'mrp' : '50', 'sellingPrice' : '48', 'tax' : '5%'},
+      },
+      {
+        data: 'category',
+        type: 'text'
 
-  ]
+      },
+      {
+        data: 'sku',
+        type: 'text'
 
-  columns : [
-    {
-      data : 'sku'
-    },
-    {
-      data : 'name'
-    },
-    {
-      data : 'mrp'
-    },
-    {
-      data : 'sellingPrice'
-    },
-    {
-      data : 'tax'
-    }
-  ]
+      },
+      {
+        data: 'productMrp',
+        type: 'numeric',
+        numericFormat: {
+          pattern: '0,0.00',
+        },
+        allowInvalid: false
 
-  options : {
-    stretchH : 'all'
+      },
+      {
+        data: 'shopPrice',
+        type: 'numeric',
+        numericFormat: {
+          pattern: '0,0.00',
+        },
+        allowInvalid: false
+
+
+      },
+      {
+        data: 'cgst',
+        type: 'numeric',
+        numericFormat: {
+          pattern: '0,0.00',
+        },
+        allowInvalid: false
+
+
+      },
+      {
+        data: 'sgst',
+        type: 'numeric',
+        numericFormat: {
+          pattern: '0,0.00',
+        },
+        allowInvalid: false
+
+
+      },
+      {
+        data: 'hsn',
+        type: 'text',
+
+      },
+      {
+        data: 'tags',
+        type: 'text'
+
+      }
+    ]
+
   }
 
-  constructor() { }
+  constructor(private hotRegisterer: HotTableRegisterer, public dialog: MatDialog, public bulkUploadService: BulkUploadService, public snackBar: MatSnackBar) { }
 
   ngOnInit() {
+    this.instatiateEmptyData();
+  }
+
+  instatiateEmptyData() {
+
+    for (let i = 0; i < 25; i++) {
+      this.dataset.push({ 'productName': '', 'productDescription': '', 'category': '', 'sku': '', 'productMrp': '', 'shopPrice': '', 'cgst': '', 'sgst': '', 'hsn': '', 'tags': '' })
+
+    }
+
+  }
+
+  saveData() {
+    this.validateData();
+  }
+
+  validateData() {
+
+    this.errMsgs = [];
+    this.saving = false;
+    let itemPostArr = [];
+
+    let hotConst = this.hotRegisterer.getInstance(this.instance);
+
+    for (let rowNum = 0; rowNum < hotConst.getSourceData().length; rowNum++) {
+
+      if (!hotConst.isEmptyRow(rowNum)) {
+        let eachItemObj : any = hotConst.getSourceDataAtRow(rowNum);
+        eachItemObj.tags = eachItemObj.tags == '' ? [] : eachItemObj.tags.split(',')
+        itemPostArr.push(eachItemObj);
+        for (let columnNum = 0; columnNum < this.colHeaders.length; columnNum++) {
+          if ((hotConst.getDataAtCell(rowNum, columnNum) === undefined || hotConst.getDataAtCell(rowNum, columnNum) === null ||
+            hotConst.getDataAtCell(rowNum, columnNum).toString().trim().length == 0) && this.mandatoryColumns.indexOf(this.colHeaders[columnNum]) != -1) {
+            let errObj = { errMsg: this.colHeaders[columnNum].replace('*', '') + ' is missing at Row Number: ' + (rowNum + 1), rowNum: rowNum, columnNum: columnNum }
+            this.errMsgs.push(errObj);
+          }
+
+        }
+
+      }
+
+    }
+
+    console.log(this.errMsgs);
+
+    if (this.errMsgs.length > 0) {
+      this.openErrorDialog();
+    } else {
+      if (itemPostArr.length > 0) {
+        this.saving = true;
+        this.uploadItems(itemPostArr);
+      } else {
+        let snackBarRef = this.snackBar.open('No Items are entered', 'OK');
+
+      }
+    }
+
+
+  }
+
+  openErrorDialog() {
+    const dialogRef = this.dialog.open(ErrorDialog, {
+      data: { errData: this.errMsgs }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`); // Pizza!
+      if (result != null) {
+        this.goToCell(result);
+      }
+    });
+
+  }
+
+  goToCell(errObj) {
+    let hotConst = this.hotRegisterer.getInstance(this.instance);
+    hotConst.selectCell(errObj.rowNum, errObj.columnNum);
+  }
+
+
+  uploadItems(itemPostArr) {
+
+    let shopId: number = 407;
+
+    this.bulkUploadService.uploadItemsInBulk(shopId, itemPostArr).subscribe((data: any) => {
+      this.saving = false;
+      this.instatiateEmptyData();
+    }, (err : any) => {
+      let snackBarRef = this.snackBar.open('Error in saving items', 'OK');
+    })
+  }
+
+}
+
+@Component({
+  selector: 'error-dialog',
+  templateUrl: 'error-dialog.html',
+})
+export class ErrorDialog {
+
+  constructor(
+    public dialogRef: MatDialogRef<ErrorDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any) { }
+
+  onNoClick(): void {
+    this.dialogRef.close(null);
+  }
+
+  clickError(message) {
+    this.dialogRef.close(message);
   }
 
 }

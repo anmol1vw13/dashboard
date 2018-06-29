@@ -16,7 +16,7 @@ import { NotificationsComponent } from '../../notifications/notifications.compon
 import { UpgradeComponent } from '../../upgrade/upgrade.component';
 
 import {MatExpansionModule} from '@angular/material/expansion';
-import { HotTableModule } from 'ng2-handsontable';
+import { HotTableModule } from '@handsontable/angular';
 
 
 
@@ -37,13 +37,14 @@ import {
   MatCardModule,
   MatListModule,
   MatSnackBarModule,
+  MatDividerModule,
   MatProgressBarModule
 } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
 import { DashboardModule } from '../../dashboard/dashboard.module';
 
 import { PresentationsComponent, AddItemToPresentation } from '../../presentations/presentations.component';
-import { BulkuploadComponent } from '../../bulkupload/bulkupload.component';
+import { BulkuploadComponent, ErrorDialog } from '../../bulkupload/bulkupload.component';
 
 @NgModule({
   imports: [
@@ -64,17 +65,20 @@ import { BulkuploadComponent } from '../../bulkupload/bulkupload.component';
     MatTableModule,
     MatIconModule,
     MatChipsModule,
-    HotTableModule,
+    HotTableModule.forRoot(),
     MatAutocompleteModule,
     FormsModule,
     MatFormFieldModule,
     MatCardModule,
     MatListModule,
     MatSnackBarModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatDividerModule,
+    MatProgressBarModule,
   ],
   entryComponents: [
-    AddItemToPresentation
+    AddItemToPresentation,
+    ErrorDialog
   ],
   declarations: [
     DashboardComponent,
@@ -87,7 +91,8 @@ import { BulkuploadComponent } from '../../bulkupload/bulkupload.component';
     UpgradeComponent,
     PresentationsComponent,
     BulkuploadComponent,
-    AddItemToPresentation
+    AddItemToPresentation,
+    ErrorDialog
   ]
 })
 
