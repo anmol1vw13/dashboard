@@ -18,8 +18,8 @@ export class BulkuploadComponent implements OnInit {
 
   instance: string = 'hot';
   mandatoryColumns = ['Product Name*', 'Category*', 'Sku*', 'Product MRP*', 'Shop Price*', 'CGST Rate (%)*', 'SGST Rate (%)*']
-  colHeaders = ['Product Name*', 'Product Description', 'Category*', 'Sku*', 'Product MRP*', 'Shop Price*', 'CGST Rate (%)*', 'SGST Rate (%)*', 'HSN Code', 'Tags'];
-  colWidths = ['200', '200', '150', '150', '150', '150', '150', '150', '150', '200']
+  colHeaders = ['Product Name*', 'Product Description', 'Category*', 'Sku*', 'Product MRP*', 'Shop Price*', 'CGST Rate (%)*', 'SGST Rate (%)*', 'HSN Code', 'Tags','Presentation Header'];
+  colWidths = ['200', '200', '150', '150', '150', '150', '150', '150', '150', '200','200']
   dataset: any[] = []
   saving: boolean = false;
 
@@ -100,6 +100,11 @@ export class BulkuploadComponent implements OnInit {
         data: 'tags',
         type: 'text'
 
+      },
+      {
+        data: 'presentationHeader',
+        type: 'text'
+
       }
     ]
 
@@ -114,7 +119,7 @@ export class BulkuploadComponent implements OnInit {
   instatiateEmptyData() {
 
     for (let i = 0; i < 25; i++) {
-      this.dataset.push({ 'productName': '', 'productDescription': '', 'category': '', 'sku': '', 'productMrp': '', 'shopPrice': '', 'cgst': '', 'sgst': '', 'hsn': '', 'tags': '' })
+      this.dataset.push({ 'productName': '', 'productDescription': '', 'category': '', 'sku': '', 'productMrp': '', 'shopPrice': '', 'cgst': '', 'sgst': '', 'hsn': '', 'tags': '','presentationHeader':'' })
 
     }
 
