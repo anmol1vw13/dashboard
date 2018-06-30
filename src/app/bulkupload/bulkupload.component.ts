@@ -30,8 +30,7 @@ export class BulkuploadComponent implements OnInit {
     minSpareRows: 1,
     currentRowClassName: 'currentRow',
     currentColClassName: 'currentCol',
-    width: 1400,
-    height: 700,
+
     columns: [
       {
         data: 'productName',

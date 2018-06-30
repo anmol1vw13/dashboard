@@ -13,8 +13,8 @@
     <mat-progress-bar style="position: sticky;top:0;align-self: flex-start;" *ngIf="saving" style="margin-bottom: 2%;margin-top: 2%;"
       mode="indeterminate"></mat-progress-bar>
     <mat-divider *ngIf="!saving" style="margin-bottom: 2%;margin-top: 2%;"></mat-divider>
-    <div>
-      <hot-table [hotId]="instance" [data]="dataset" [settings]="options" [colWidths]="colWidths" [outsideClickDeselects]="false"
+    <div style="font-size: 0.8rem;">
+      <hot-table [hotId]="instance" [data]="dataset" [settings]="options" [outsideClickDeselects]="false"
         [rowHeaders]="true" [colHeaders]="colHeaders"></hot-table>
     </div>
   </div>
