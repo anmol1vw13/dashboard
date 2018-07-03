@@ -1,0 +1,35 @@
+<div class="container-fluid">
+        <form [formGroup]="optionForm" (ngSubmit)="saveOption()">
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <input matInput formControlName="name" placeholder="Name">
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input matInput formControlName="description" placeholder="Description">
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input matInput formControlName="barcodeId" placeholder="Barcode Id">
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input matInput formControlName="sku" placeholder="SKU">
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                   
+                    <mat-form-field>
+                        <input type="number" matInput formControlName="basePrice" placeholder="Base Price">
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-select formControlName="sellingType" placeholder="Selling Type">
+                            <mat-option value="OPEN">OPEN</mat-option>
+                            <mat-option value="HIDDEN">HIDDEN</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="col-md-3">
+                    <button type="submit" mat-raised-button color="primary">Save</button>
+            </div>
+        </form>
+    </div>

@@ -9,6 +9,7 @@ import { TypographyComponent } from '../../typography/typography.component';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
 import { PresentationsComponent } from '../../presentations/presentations.component';
 import { BulkuploadComponent } from '../../bulkupload/bulkupload.component';
+import { ComboitemComponent } from '../../comboitem/comboitem.component';
 
 
 export const AdminLayoutRoutes: Routes = [
@@ -65,6 +66,7 @@ export const AdminLayoutRoutes: Routes = [
         component: PresentationsComponent,
       },
       {path : 'bulkupload', component: BulkuploadComponent},
+      {path : 'comboitem', component: ComboitemComponent},
     { path: 'user-profile',   component: UserProfileComponent },
     { path: 'table-list',     component: TableListComponent },
     { path: 'typography',     component: TypographyComponent },

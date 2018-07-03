@@ -29,6 +29,7 @@
     "@progress/kendo-angular-treeview": "^2.2.0",
     "ajv": "6.4.0",
     "angular-tree-component": "^7.2.0",
+    "angular2-uuid": "^1.1.1",
     "arrive": "2.4.1",
     "bootstrap": "4.1.0",
     "bootstrap-material-design": "4.1.1",

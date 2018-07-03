@@ -140,7 +140,7 @@ export class BulkuploadComponent implements OnInit {
     for (let rowNum = 0; rowNum < hotConst.getSourceData().length; rowNum++) {
 
       if (!hotConst.isEmptyRow(rowNum)) {
-        let eachItemObj : any = hotConst.getSourceDataAtRow(rowNum);
+        let eachItemObj : any = JSON.parse(JSON.stringify(hotConst.getSourceDataAtRow(rowNum)));
         eachItemObj.tags = eachItemObj.tags == '' ? [] : eachItemObj.tags.split(',')
         itemPostArr.push(eachItemObj);
         for (let columnNum = 0; columnNum < this.colHeaders.length; columnNum++) {

@@ -63,7 +63,7 @@
                 <ng-container matColumnDef="expand">
                   <mat-header-cell *matHeaderCellDef></mat-header-cell>
                   <mat-cell *matCellDef="let item">
-                    <button mat-button (click)="expand(item)">Expand</button>
+                    <button mat-button (click)="expand(item)" >Expand</button>
                     <mat-icon style="top: 6px;position:relative; cursor: pointer;" (click)="deleteItemFromPresentation(presentation.id,item.id,itemPresentation)">delete</mat-icon>
                   </mat-cell>
                 </ng-container>

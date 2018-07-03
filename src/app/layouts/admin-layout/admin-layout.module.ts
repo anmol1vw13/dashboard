@@ -45,12 +45,15 @@ import { DashboardModule } from '../../dashboard/dashboard.module';
 
 import { PresentationsComponent, AddItemToPresentation } from '../../presentations/presentations.component';
 import { BulkuploadComponent, ErrorDialog } from '../../bulkupload/bulkupload.component';
+import { ComboitemComponent, ItemComponent, OptionComponent, PropItem, SharedService } from '../../comboitem/comboitem.component';
+import { TreeModule } from 'angular-tree-component';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule.forChild(AdminLayoutRoutes),
     FormsModule,
+    ReactiveFormsModule,
     MatButtonModule,
     MatRippleModule,
     MatInputModule,
@@ -67,7 +70,6 @@ import { BulkuploadComponent, ErrorDialog } from '../../bulkupload/bulkupload.co
     MatChipsModule,
     HotTableModule.forRoot(),
     MatAutocompleteModule,
-    FormsModule,
     MatFormFieldModule,
     MatCardModule,
     MatListModule,
@@ -75,10 +77,13 @@ import { BulkuploadComponent, ErrorDialog } from '../../bulkupload/bulkupload.co
     MatProgressBarModule,
     MatDividerModule,
     MatProgressBarModule,
+    TreeModule
   ],
   entryComponents: [
     AddItemToPresentation,
-    ErrorDialog
+    ErrorDialog,
+    ItemComponent,
+    OptionComponent
   ],
   declarations: [
     DashboardComponent,
@@ -92,8 +97,13 @@ import { BulkuploadComponent, ErrorDialog } from '../../bulkupload/bulkupload.co
     PresentationsComponent,
     BulkuploadComponent,
     AddItemToPresentation,
-    ErrorDialog
-  ]
+    ErrorDialog,
+    ComboitemComponent,
+    ItemComponent,
+    OptionComponent,
+    PropItem
+  ],
+  providers:[SharedService]
 })
 
 export class AdminLayoutModule {}
