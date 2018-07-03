@@ -1,5 +1,5 @@
-import { Component, OnInit, Inject, Pipe, PipeTransform, Injectable } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material';
+import { Component, OnInit, Inject, Pipe, PipeTransform, Injectable, ViewEncapsulation } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialog, MatSnackBar } from '@angular/material';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UUID } from 'angular2-uuid';
 import { Item } from '../catalogue/catalogue.model';
@@ -48,11 +48,12 @@ export class PropItem {
 @Component({
   selector: 'app-comboitem',
   templateUrl: './comboitem.component.html',
-  styleUrls: ['./comboitem.component.scss']
+  styleUrls: ['./comboitem.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ComboitemComponent implements OnInit {
 
-  constructor(public dialog: MatDialog, private sharedService: SharedService) {
+  constructor(public dialog: MatDialog, private sharedService: SharedService, public snackBar: MatSnackBar) {
     this.sharedService.component = this;
   }
   addItemShow = true;
@@ -73,20 +74,31 @@ export class ComboitemComponent implements OnInit {
         this.selectedProp(node.data)
     }
   }
-  openItemDialog() {
+  openItemDialog(edit) {
 
     const dialogRef = this.dialog.open(ItemComponent, {
       data: {
         selectedParentProp: this.selectedParentProp,
-        props: this.props
+        props: this.props,
+        edit: edit
       }
     })
 
     dialogRef.afterClosed().subscribe(
       data => {
         if (data != undefined) {
-          console.log("Dialog output:", data)
-          this.addToProps(data);
+
+          if (edit) {
+            this.selectedParentProp.name = data.name,
+              this.selectedParentProp.description = data.description,
+              this.selectedParentProp.barcodeId = data.barcodeId,
+              this.selectedParentProp.sku = data.sku,
+              this.selectedParentProp.mrp = data.mrp,
+              this.selectedParentProp.basePrice = data.basePrice
+          } else {
+            console.log("Dialog output:", data)
+            this.addToProps(data);
+          }
         }
       }
     );
@@ -94,6 +106,10 @@ export class ComboitemComponent implements OnInit {
 
 
   addToProps(propToAdd) {
+
+    if (propToAdd.children === undefined || propToAdd.children === null) {
+      propToAdd.children = [];
+    }
 
     if (this.selectedParentProp == null) {
       this.props.push(propToAdd);
@@ -116,18 +132,25 @@ export class ComboitemComponent implements OnInit {
     this.addOptionShow = true;
   }
 
-  openOptionDialog() {
+  openOptionDialog(edit) {
     const dialogRef = this.dialog.open(OptionComponent, {
       data: {
         selectedParentProp: this.selectedParentProp,
-        props: this.props
+        props: this.props,
+        edit: edit
       }
     })
     dialogRef.afterClosed().subscribe(
       data => {
-        console.log("Dialog output:", data)
-        if (data != undefined)
-          this.addToProps(data);
+        if (data != undefined) {
+          if (edit) {
+            this.selectedParentProp.name = data.name;
+            console.log(this.props);
+          } else {
+            console.log("Dialog output:", data)
+            this.addToProps(data);
+          }
+        }
       }
     );
   }
@@ -139,7 +162,11 @@ export class ComboitemComponent implements OnInit {
   }
 
   selectedProp(prop) {
-    if (prop.type == "ITEM") {
+
+    if (prop == undefined || prop == null) {
+      this.showItem();
+    }
+    else if (prop.type == "ITEM") {
       this.showOption();
     } else if (prop.type == "OPTION") {
       this.showItem();
@@ -153,19 +180,76 @@ export class ComboitemComponent implements OnInit {
   }
 
   saveProps() {
-    this.convertPropsChildren(this.props);
-    console.log(JSON.stringify(this.props));
+
+    if (this.validateProps()) {
+      console.log('Saving');
+      this.convertPropsChildren(this.props);
+      console.log(JSON.stringify(this.props));
+    }
   }
 
-  convertPropsChildren(props){
-   
-    for(let prop of props){
-      if(prop.children == undefined||prop.children.length==0){
+  validateProps() {
+    let checkStatus = false;
+    checkStatus = this.checkIfOptionHasItem(this.props[0], true);
+    return checkStatus
+  }
+
+  checkIfOptionHasItem(parent, status) {
+    parent.children.filter((eachItem: any) => {
+      if (eachItem.type == 'OPTION') {
+        if (eachItem.children === undefined || eachItem.children === null || eachItem.children.length == 0) {
+          let snackBarRef = this.snackBar.open('You cannot save an option without an item. Option name is ' + eachItem.name, 'OK');
+          status = false;
+          return;
+        }
+      }
+      this.checkIfOptionHasItem(eachItem, status);
+    })
+    if (status) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  removeItemOrOption() {
+    if (this.props[0].selfId === this.selectedParentProp.selfId) {
+      this.props = [];
+    } else {
+      this.removeFromTree(this.props[0], this.selectedParentProp)
+      this.selectedParentProp = this.props[0];
+    }
+
+    if (this.props.length > 0) {
+      this.selectedProp(this.props[0]);
+    }
+    else {
+      this.selectedProp(null);
+    }
+
+
+  }
+
+  removeFromTree(parent, childNameToRemove) {
+    parent.children.filter((eachItem: any, index) => {
+      if (eachItem.selfId === childNameToRemove.selfId) {
+        parent.children.splice(index);
+      } else {
+        this.removeFromTree(parent.children[index], childNameToRemove);
+      }
+    })
+  }
+
+
+  convertPropsChildren(props) {
+
+    for (let prop of props) {
+      if (prop.children == undefined || prop.children.length == 0) {
         continue;
-      }else if(prop.type=='ITEM'){
+      } else if (prop.type == 'ITEM') {
         prop.options.push(prop.children);
         this.convertPropsChildren(prop.options)
-      }else if(prop.type=='OPTION'){
+      } else if (prop.type == 'OPTION') {
         prop.items.push(prop.children);
         this.convertPropsChildren(prop.items);
       }
@@ -190,10 +274,14 @@ export class ItemComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private formBuilder: FormBuilder
   ) {
-    this.createForm();
   }
 
   ngOnInit() {
+    if (this.data.edit) {
+      this.editForm()
+    } else {
+      this.createForm();
+    }
     console.log(this.data);
   }
 
@@ -202,9 +290,21 @@ export class ItemComponent implements OnInit {
       name: ['', Validators.required],
       description: [''],
       basePrice: ['0'],
-      mrp:['0'],
+      mrp: ['0'],
       sku: [''],
       barcodeId: ['']
+    })
+  }
+
+  editForm() {
+    this.createForm();
+    this.itemForm.setValue({
+      name: this.data.selectedParentProp.name,
+      description: this.data.selectedParentProp.description,
+      barcodeId: this.data.selectedParentProp.barcodeId,
+      sku: this.data.selectedParentProp.sku,
+      mrp: this.data.selectedParentProp.mrp,
+      basePrice: this.data.selectedParentProp.basePrice
     })
   }
 
@@ -212,10 +312,11 @@ export class ItemComponent implements OnInit {
   saveItem() {
     let item = new ComboItem()
     item.name = this.itemForm.get('name').value;
-    item.barcodeId=this.itemForm.get('barcodeId').value;
-    item.sku=this.itemForm.get('sku').value;
-    item.mrp=this.itemForm.get('mrp').value;
-    item.basePrice=this.itemForm.get('basePrice').value;
+    item.description = this.itemForm.get('description').value;
+    item.barcodeId = this.itemForm.get('barcodeId').value;
+    item.sku = this.itemForm.get('sku').value;
+    item.mrp = this.itemForm.get('mrp').value;
+    item.basePrice = this.itemForm.get('basePrice').value;
     item.type = 'ITEM';
     item.selfId = UUID.UUID();
     if (this.data.selectedParentProp != null) {
@@ -241,17 +342,29 @@ export class OptionComponent implements OnInit {
     private formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.createForm();
+
   }
 
   ngOnInit() {
     console.log(this.data);
+    if (this.data.edit) {
+      this.editForm();
+    } else {
+      this.createForm();
+    }
     //this.createForm();
   }
 
   createForm() {
     this.optionForm = this.formBuilder.group({
       name: ['', Validators.required]
+    })
+  }
+
+  editForm() {
+    this.createForm();
+    this.optionForm.setValue({
+      name: this.data.selectedParentProp.name
     })
   }
 
@@ -266,6 +379,8 @@ export class OptionComponent implements OnInit {
     }
     this.dialogRef.close(option);
   }
+
+
 }
 
 
