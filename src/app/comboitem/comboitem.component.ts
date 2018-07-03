@@ -96,6 +96,7 @@ export class ComboitemComponent implements OnInit {
 
     if(this.selectedParentProp == null){
       this.props.push(propToAdd);
+      this.selectedProp(propToAdd);
     }else{
       if(this.selectedParentProp.children == null){
         this.selectedParentProp.children=[]
