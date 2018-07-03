@@ -185,9 +185,9 @@ export class ItemComponent implements OnInit {
       name: ['', Validators.required],
       description: [''],
       basePrice: ['0'],
+      mrp:['0'],
       sku: [''],
-      barcodeId: [''],
-      sellingType: ['']
+      barcodeId: ['']
     })
   }
 
@@ -195,6 +195,10 @@ export class ItemComponent implements OnInit {
   saveItem() {
     let item = new ComboItem()
     item.name = this.itemForm.get('name').value;
+    item.barcodeId=this.itemForm.get('barcodeId').value;
+    item.sku=this.itemForm.get('sku').value;
+    item.mrp=this.itemForm.get('mrp').value;
+    item.basePrice=this.itemForm.get('basePrice').value;
     item.type = 'ITEM';
     item.selfId = UUID.UUID();
     if (this.data.selectedParentProp != null) {
@@ -230,12 +234,7 @@ export class OptionComponent implements OnInit {
 
   createForm() {
     this.optionForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      description: [''],
-      basePrice: ['0'],
-      sku: [''],
-      barcodeId: [''],
-      sellingType: ['']
+      name: ['', Validators.required]
     })
   }
 
