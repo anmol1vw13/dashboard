@@ -64,6 +64,33 @@ export class ComboitemComponent implements OnInit {
   ngOnInit() {
     this.addItemShow = true;
     this.addOptionShow = false;
+    this.props = [{
+      label: 'Root',
+      children: [
+          {
+              label: 'Child 1',
+              children: [
+                  {
+                      label: 'Grandchild 1.1'
+                  },
+                  {
+                      label: 'Grandchild 1.2'
+                  }
+              ]
+          },
+          {
+              label: 'Child 2',
+              children: [
+                  {
+                      label: 'Child 2.1'
+                  },
+                  {
+                      label: 'Child 2.2'
+                  }
+              ]
+          }
+      ]
+  }];
   }
 
   actionMapping: IActionMapping = {
@@ -75,8 +102,6 @@ export class ComboitemComponent implements OnInit {
   openItemDialog() {
 
     const dialogRef = this.dialog.open(ItemComponent, {
-      width: "75%",
-      height: "100%",
       data: {
         selectedParentProp: this.selectedParentProp,
         props: this.props
@@ -132,7 +157,9 @@ export class ComboitemComponent implements OnInit {
     );
   }
 
-  selectedProp(prop: any) {
+  selectedProp(event: any) {
+    console.log(event);
+    let prop = event.node;
     if (prop.type == "ITEM") {
       this.showOption();
     } else if (prop.type == "OPTION") {

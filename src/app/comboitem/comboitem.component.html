@@ -4,20 +4,20 @@
     <mat-card>
       <mat-card-title>Combos</mat-card-title>
       <mat-card-content>
-      <div style="margin-left:40%">
-        <ng-container *ngIf="addItemShow">
-          <button mat-flat-button (click)="openItemDialog()">Add Item</button>
-        </ng-container>
-        <ng-container *ngIf="addOptionShow">
-          <button mat-flat-button (click)="openOptionDialog()" >Add Option</button>
-        </ng-container>
-      </div>
-      <div style="overflow: hidden;display:table;">
-      <!-- <div style = "display:table-cell;width:100px;vertical-align: middle" *ngFor="let propList of getPropValues()">
+        <div style="margin-left:40%">
+          <ng-container *ngIf="addItemShow">
+            <button mat-flat-button (click)="openItemDialog()">Add Item</button>
+          </ng-container>
+          <ng-container *ngIf="addOptionShow">
+            <button mat-flat-button (click)="openOptionDialog()">Add Option</button>
+          </ng-container>
+        </div>
+        <!-- <div style="overflow: hidden;display:table;">
+      <div style = "display:table-cell;width:100px;vertical-align: middle" *ngFor="let propList of getPropValues()">
         <div style="height:50px;"*ngFor="let prop of propList">
           <button mat-flat-button (click)="selectedProp(prop)">{{prop.name}}</button>
         </div>
-      </div> -->
+      </div>
       
       <div style="display:table-cell;overflow:hidden;" >
         <div style="height:100%;margin-bottom: 15%;" *ngFor="let prop of props">
@@ -30,9 +30,13 @@
           <prop-item [prop]="prop"></prop-item>
         </div>  
       </div>
-    </div>
+    </div> -->
 
-    </mat-card-content>
+        <div class="row">
+          <p-organizationChart [value]="props" selectionMode="single" [(selection)]="selectedProp" (onNodeSelect)="selectedProp($event)"></p-organizationChart>
+        </div>
+
+      </mat-card-content>
     </mat-card>
   </div>
 </div>

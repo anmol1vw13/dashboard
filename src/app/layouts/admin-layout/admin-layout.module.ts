@@ -17,6 +17,8 @@ import { UpgradeComponent } from '../../upgrade/upgrade.component';
 
 import {MatExpansionModule} from '@angular/material/expansion';
 import { HotTableModule } from '@handsontable/angular';
+import {OrganizationChartModule} from 'primeng/organizationchart';
+
 
 
 
@@ -77,8 +79,9 @@ import { TreeModule } from 'angular-tree-component';
     MatProgressBarModule,
     MatDividerModule,
     MatProgressBarModule,
-    TreeModule
-  ],
+    TreeModule,
+    OrganizationChartModule
+    ],
   entryComponents: [
     AddItemToPresentation,
     ErrorDialog,
