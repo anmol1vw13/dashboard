@@ -153,8 +153,25 @@ export class ComboitemComponent implements OnInit {
   }
 
   saveProps() {
-
+    this.convertPropsChildren(this.props);
+    console.log(JSON.stringify(this.props));
   }
+
+  convertPropsChildren(props){
+   
+    for(let prop of props){
+      if(prop.children == undefined||prop.children.length==0){
+        continue;
+      }else if(prop.type=='ITEM'){
+        prop.options.push(prop.children);
+        this.convertPropsChildren(prop.options)
+      }else if(prop.type=='OPTION'){
+        prop.items.push(prop.children);
+        this.convertPropsChildren(prop.items);
+      }
+    }
+  }
+
 }
 
 @Component({

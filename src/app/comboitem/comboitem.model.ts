@@ -9,6 +9,7 @@ export class ComboItem {
     parentId: String;
     type:String;
     children:Array<Object>;
+    options:Array<Object>=[];
     expanded:boolean=true;
 }
 
@@ -18,5 +19,6 @@ export class ComboOption{
     parentId:String;
     type:String;
     children:Array<Object>;
+    items:Array<Object>=[];
     expanded:boolean=true;
 }
