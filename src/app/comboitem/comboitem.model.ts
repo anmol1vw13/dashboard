@@ -4,6 +4,7 @@ export class ComboItem {
     parentId: String;
     type:String;
     children:Array<Object>;
+    expanded:boolean=true;
 }
 
 export class ComboOption{
@@ -12,4 +13,5 @@ export class ComboOption{
     parentId:String;
     type:String;
     children:Array<Object>;
+    expanded:boolean=true;
 }

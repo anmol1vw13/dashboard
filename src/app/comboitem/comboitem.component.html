@@ -32,9 +32,22 @@
       </div>
     </div> -->
 
-        <div class="row">
-          <p-organizationChart [value]="props" selectionMode="single" [(selection)]="selectedProp" (onNodeSelect)="selectedProp($event)"></p-organizationChart>
+        <div class="row" style="margin: 5% 41%;">
+          
+          <p-organizationChart [value]="props" selectionMode="single" [(selection)]="selectedParentProp" (onNodeSelect)="selectedPropViaEvent($event)">
+              <ng-template let-node pTemplate="ITEM">
+                  <span style="font-weight:bold">{{node.name}}</span>
+              </ng-template>
+              <ng-template let-node pTemplate="OPTION">
+                  <span>{{node.name}}</span>
+              </ng-template>
+              
+          </p-organizationChart>
         </div>
+
+        <span *ngIf="props.length>0">
+          <button mat-flat-button (click)="saveProps()">Save</button>
+        </span>
 
       </mat-card-content>
     </mat-card>

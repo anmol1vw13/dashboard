@@ -5,14 +5,14 @@ import { UUID } from 'angular2-uuid';
 import { Item } from '../catalogue/catalogue.model';
 import { ComboItem, ComboOption } from './comboitem.model';
 import { forEach } from '@angular/router/src/utils/collection';
-import {forwardRef, Input} from '@angular/core'
+import { forwardRef, Input } from '@angular/core'
 import { IActionMapping } from 'angular-tree-component';
 
 @Injectable()
 export class SharedService {
 
-    component: ComboitemComponent;
-    constructor() { }
+  component: ComboitemComponent;
+  constructor() { }
 }
 
 @Component({
@@ -35,12 +35,12 @@ export class SharedService {
 export class PropItem {
   @Input() prop;
 
-  constructor( private sharedService:SharedService){
-    
+  constructor(private sharedService: SharedService) {
+
   }
 
-  selectedProp(prop){
-    if(this.sharedService.component){
+  selectedProp(prop) {
+    if (this.sharedService.component) {
       this.sharedService.component.selectedProp(prop);
     }
   }
@@ -52,45 +52,19 @@ export class PropItem {
 })
 export class ComboitemComponent implements OnInit {
 
-  constructor(public dialog: MatDialog, private  sharedService:SharedService) {
-    this.sharedService.component=this;
+  constructor(public dialog: MatDialog, private sharedService: SharedService) {
+    this.sharedService.component = this;
   }
   addItemShow = true;
   addOptionShow = false;
   selectedParentProp = null;
-  props = []
+  props = [];
 
 
   ngOnInit() {
     this.addItemShow = true;
     this.addOptionShow = false;
-    this.props = [{
-      label: 'Root',
-      children: [
-          {
-              label: 'Child 1',
-              children: [
-                  {
-                      label: 'Grandchild 1.1'
-                  },
-                  {
-                      label: 'Grandchild 1.2'
-                  }
-              ]
-          },
-          {
-              label: 'Child 2',
-              children: [
-                  {
-                      label: 'Child 2.1'
-                  },
-                  {
-                      label: 'Child 2.2'
-                  }
-              ]
-          }
-      ]
-  }];
+    this.props = [];
   }
 
   actionMapping: IActionMapping = {
@@ -110,8 +84,10 @@ export class ComboitemComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(
       data => {
-        console.log("Dialog output:", data)
-        this.addToProps(data);
+        if (data != undefined) {
+          console.log("Dialog output:", data)
+          this.addToProps(data);
+        }
       }
     );
   }
@@ -119,12 +95,12 @@ export class ComboitemComponent implements OnInit {
 
   addToProps(propToAdd) {
 
-    if(this.selectedParentProp == null){
+    if (this.selectedParentProp == null) {
       this.props.push(propToAdd);
       this.selectedProp(propToAdd);
-    }else{
-      if(this.selectedParentProp.children == null){
-        this.selectedParentProp.children=[]
+    } else {
+      if (this.selectedParentProp.children == null) {
+        this.selectedParentProp.children = []
       }
       this.selectedParentProp.children.push(propToAdd);
     }
@@ -142,8 +118,6 @@ export class ComboitemComponent implements OnInit {
 
   openOptionDialog() {
     const dialogRef = this.dialog.open(OptionComponent, {
-      width: "75%",
-      height: "100%",
       data: {
         selectedParentProp: this.selectedParentProp,
         props: this.props
@@ -152,14 +126,19 @@ export class ComboitemComponent implements OnInit {
     dialogRef.afterClosed().subscribe(
       data => {
         console.log("Dialog output:", data)
-        this.addToProps(data);
+        if (data != undefined)
+          this.addToProps(data);
       }
     );
   }
 
-  selectedProp(event: any) {
+  selectedPropViaEvent(event: any) {
     console.log(event);
     let prop = event.node;
+    this.selectedProp(prop);
+  }
+
+  selectedProp(prop) {
     if (prop.type == "ITEM") {
       this.showOption();
     } else if (prop.type == "OPTION") {
@@ -168,8 +147,13 @@ export class ComboitemComponent implements OnInit {
     this.selectedParentProp = prop;
   }
 
-  getPropValues(){
+
+  getPropValues() {
     return this.props.values();
+  }
+
+  saveProps() {
+
   }
 }
 
@@ -264,7 +248,6 @@ export class OptionComponent implements OnInit {
     if (this.data.selectedParentProp != null) {
       option.parentId = this.data.selectedParentProp.selfId;
     }
-
     this.dialogRef.close(option);
   }
 }
