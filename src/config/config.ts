@@ -9,3 +9,4 @@ export const getPresentations = API_ENDPOINT+"v3/presentations/shop";
 export const updatePresentation = API_ENDPOINT+"catalogue/presentation/update";
 
 export const uploadItemBulk = API_ENDPOINT+"catalogue/items/upload";
+export const addNestedItemAPI = API_ENDPOINT+"catalogue/item/nested/add";

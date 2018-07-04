@@ -43,12 +43,12 @@
         <!-- <div class="row" style="margin: 5% 41%;"> -->
         <div class="row">
 
-          <p-organizationChart [value]="props" selectionMode="single" [(selection)]="selectedParentProp" (onNodeSelect)="selectedPropViaEvent($event)">
+          <p-organizationChart  [value]="props" selectionMode="single" [(selection)]="selectedParentProp" (onNodeSelect)="selectedPropViaEvent($event)">
             <ng-template let-node pTemplate="ITEM">
-              <span style="font-weight:bold">{{node.name}}<i class="material-icons" style="display: inline;line-height: 0%">view list</i></span>
+              <span style="font-weight:bold; display:inline-grid;">{{node.name}}<i class="material-icons">view list</i></span>
             </ng-template>
             <ng-template let-node pTemplate="OPTION">
-              <span>{{node.name}}<i class="material-icons" style="margin-left:25%;display: inline;line-height: 0%">view list</i></span>
+              <span style="display:inline-grid;">{{node.name}}<i class="material-icons">view list</i></span>
             </ng-template>
 
           </p-organizationChart>

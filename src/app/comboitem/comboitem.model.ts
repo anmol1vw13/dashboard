@@ -7,10 +7,15 @@ export class ComboItem {
     mrp:Number;
     basePrice:Number;
     parentId: String;
+    sellingType:String;
     type:String;
     children:Array<Object>;
     options:Array<Object>=[];
     expanded:boolean=true;
+    parameters:Array<Parameter>=[];
+    hsncode:String;
+    cgst:Number;
+    sgst:Number;
 }
 
 export class ComboOption{
@@ -21,4 +26,9 @@ export class ComboOption{
     children:Array<Object>;
     items:Array<Object>=[];
     expanded:boolean=true;
+}
+
+export class Parameter{
+    name:String;
+    type:String="TAG";
 }
