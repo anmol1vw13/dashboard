@@ -1,9 +1,10 @@
 <div class="container-fluid">
 
     <!-- <div (click)="closeDialog()"><mat-icon style="float:right;cursor:pointer;" >clear</mat-icon></div> -->
+    <mat-progress-bar style="position: sticky;top:0;align-self: flex-start;margin-bottom: 2%;margin-top: 2%;" *ngIf="loading"
+      mode="indeterminate"></mat-progress-bar>
     <mat-form-field>
-        <input type="text" [(ngModel)]="itemSearch" matInput placeholder="Search for item" (keyup)="searchItem($event)" [matAutocomplete]="auto">
-       
+        <input type="text" [(ngModel)]="itemSearch" matInput placeholder="Search for item" (input)="searchItem($event)" [matAutocomplete]="auto">
     </mat-form-field>
 
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectItem($event)" [displayWith]="displayItem">

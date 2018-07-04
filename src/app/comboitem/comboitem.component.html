@@ -2,7 +2,7 @@
   <div class="container-fluid">
 
     <mat-card>
-      <mat-card-title>Combos</mat-card-title>
+      <mat-card-title>Create Combos</mat-card-title>
       <mat-card-content>
         <div style="margin-bottom: 5%">
           <ng-container *ngIf="addItemShow">
@@ -12,12 +12,13 @@
             <button mat-flat-button (click)="openOptionDialog(false)">Add Option</button>
           </ng-container>
           <ng-container *ngIf="selectedParentProp && addItemShow">
-            <button mat-flat-button (click)="removeItemOrOption()">Remove Option</button>
+            <button mat-flat-button (click)="removeItemOrOption()" style="float:right;">Remove Option</button>
             <button mat-flat-button (click)="openOptionDialog(true)">Edit Option</button>
           </ng-container>
           <ng-container *ngIf="selectedParentProp && addOptionShow">
-            <button mat-flat-button (click)="removeItemOrOption()">Remove Item</button>
+            <button mat-flat-button (click)="removeItemOrOption()" style="float:right;">Remove Item</button>
             <button mat-flat-button (click)="openItemDialog(true)">Edit Item</button>
+            <mat-checkbox style="margin-left: 3%" [(ngModel)]="selectedParentProp.defaultItem" (change)="addStyle()">Set as Default Item</mat-checkbox>
           </ng-container>
         </div>
         <!-- <div style="overflow: hidden;display:table;">
@@ -41,14 +42,19 @@
     </div> -->
 
         <!-- <div class="row" style="margin: 5% 41%;"> -->
-        <div class="row">
+        <div class="row" style="overflow-x: scroll">
 
-          <p-organizationChart  [value]="props" selectionMode="single" [(selection)]="selectedParentProp" (onNodeSelect)="selectedPropViaEvent($event)">
+          <p-organizationChart [value]="props" selectionMode="single" [(selection)]="selectedParentProp" (onNodeSelect)="selectedPropViaEvent($event)">
             <ng-template let-node pTemplate="ITEM">
-              <span style="font-weight:bold; display:inline-grid;">{{node.name}}<i class="material-icons">view list</i></span>
+              <span style="font-weight:bold">{{node.name}}
+                
+                <!-- <i class="material-icons" style="display: inline;line-height: 0%">view list</i> -->
+              </span>
             </ng-template>
             <ng-template let-node pTemplate="OPTION">
-              <span style="display:inline-grid;">{{node.name}}<i class="material-icons">view list</i></span>
+              <span>{{node.name}}
+                <!-- <i class="material-icons" style="display: inline;line-height: 0%">view list</i> -->
+              </span>
             </ng-template>
 
           </p-organizationChart>

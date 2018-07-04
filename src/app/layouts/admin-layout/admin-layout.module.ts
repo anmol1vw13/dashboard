@@ -40,14 +40,15 @@ import {
   MatListModule,
   MatSnackBarModule,
   MatDividerModule,
-  MatProgressBarModule
+  MatProgressBarModule,
+  MatCheckboxModule
 } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
 import { DashboardModule } from '../../dashboard/dashboard.module';
 
-import { PresentationsComponent, AddItemToPresentation } from '../../presentations/presentations.component';
+import { PresentationsComponent, AddItemToPresentation, CreatePresentationComponent } from '../../presentations/presentations.component';
 import { BulkuploadComponent, ErrorDialog } from '../../bulkupload/bulkupload.component';
-import { ComboitemComponent, ItemComponent, OptionComponent, PropItem, SharedService } from '../../comboitem/comboitem.component';
+import { ComboitemComponent, ItemComponent, OptionComponent, PropItem, SharedService, ComboItemModalComponent } from '../../comboitem/comboitem.component';
 import { TreeModule } from 'angular-tree-component';
 
 @NgModule({
@@ -80,13 +81,16 @@ import { TreeModule } from 'angular-tree-component';
     MatDividerModule,
     MatProgressBarModule,
     TreeModule,
-    OrganizationChartModule
+    OrganizationChartModule,
+    MatCheckboxModule
     ],
   entryComponents: [
     AddItemToPresentation,
     ErrorDialog,
     ItemComponent,
-    OptionComponent
+    OptionComponent,
+    CreatePresentationComponent,
+    ComboItemModalComponent,
   ],
   declarations: [
     DashboardComponent,
@@ -104,7 +108,9 @@ import { TreeModule } from 'angular-tree-component';
     ComboitemComponent,
     ItemComponent,
     OptionComponent,
-    PropItem
+    PropItem,
+    CreatePresentationComponent,
+    ComboItemModalComponent
   ],
   providers:[SharedService]
 })

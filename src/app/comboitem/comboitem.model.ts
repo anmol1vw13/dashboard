@@ -16,6 +16,7 @@ export class ComboItem {
     hsncode:String;
     cgst:Number;
     sgst:Number;
+    defaultItem : boolean = false;
 }
 
 export class ComboOption{

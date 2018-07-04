@@ -62,12 +62,37 @@ export class ComboitemComponent implements OnInit {
   addOptionShow = false;
   selectedParentProp = null;
   props = [];
+  @Input('properties') properties : any;
 
+  getNestedChildren(items) {
+    for (let eachItem of items) {
+      eachItem.children = [];
+      if (eachItem.type == 'ITEM') {
+        if (eachItem.options != null) {
+          eachItem.children.push(this.getNestedChildren(eachItem.options))
+        } else {
+          return eachItem;
+        }
+      } else {
+        eachItem.type == 'OPTION'
+        if (eachItem.items != null) {
+          eachItem.children.push(this.getNestedChildren(eachItem.items))
+        } else {
+          return eachItem
+        }
+      }
+    }
+    return items;
 
+  }
   ngOnInit() {
     this.addItemShow = true;
     this.addOptionShow = false;
-    this.props = [];
+      this.props = [];
+      console.log(this.properties);
+      if(this.properties != undefined && this.properties.length>0){
+        this.props = this.properties;
+      }
   }
 
   actionMapping: IActionMapping = {
@@ -113,13 +138,15 @@ export class ComboitemComponent implements OnInit {
       propToAdd.children = [];
     }
 
+    if(this.selectedParentProp != null && this.selectedParentProp.children.length == 0 && propToAdd.type == 'ITEM'){
+      propToAdd.styleClass='department-cto';
+      propToAdd.defaultItem= true;
+    }
+
     if (this.selectedParentProp == null) {
       this.props.push(propToAdd);
       this.selectedProp(propToAdd);
-    } else {
-      if (this.selectedParentProp.children == null) {
-        this.selectedParentProp.children = []
-      }
+    } else {      
       this.selectedParentProp.children.push(propToAdd);
     }
   }
@@ -163,8 +190,18 @@ export class ComboitemComponent implements OnInit {
     this.selectedProp(prop);
   }
 
+  addStyle(){
+    if(this.selectedParentProp.defaultItem){
+      this.selectedParentProp.styleClass = 'department-cto';
+    } else {
+      this.selectedParentProp.styleClass = '';
+    }
+
+  }
+
   selectedProp(prop) {
 
+    console.log(prop);
     if (prop == undefined || prop == null) {
       this.showItem();
     }
@@ -238,7 +275,7 @@ export class ComboitemComponent implements OnInit {
   removeFromTree(parent, childNameToRemove) {
     parent.children.filter((eachItem: any, index) => {
       if (eachItem.selfId === childNameToRemove.selfId) {
-        parent.children.splice(index);
+        parent.children.splice(index, 1);
       } else {
         this.removeFromTree(parent.children[index], childNameToRemove);
       }
@@ -262,6 +299,81 @@ export class ComboitemComponent implements OnInit {
   }
 
 }
+
+
+
+
+
+@Component({
+  selector: 'app-combomodalitem',
+  template: `<button style="margin-left:95%; margin-bottom:1%;" mat-icon-button [mat-dialog-close]="true">
+  <mat-icon>close</mat-icon>
+  </button>
+  <app-comboitem [properties]="props"></app-comboitem>`,
+  styleUrls: ['./comboitem.component.scss'],
+  encapsulation: ViewEncapsulation.None
+})
+export class ComboItemModalComponent implements OnInit {
+
+
+  constructor(public dialogRef: MatDialogRef<any>, public dialog: MatDialog, private sharedService: SharedService, public snackBar: MatSnackBar, @Inject(MAT_DIALOG_DATA) public data : any) {
+    //this.sharedService.component = this;
+  }
+
+  props = [];
+
+  getNestedChildren(items) {
+    for (let eachItem of items) {
+      eachItem.expanded = true;
+      eachItem.children = [];
+      eachItem.selfId = eachItem.id;
+      if (eachItem.type == 'ITEM') {
+        if(eachItem.defaultItem){
+          eachItem.styleClass = 'department-cto';
+        }
+        if (eachItem.options != null) {
+          eachItem.children.push(this.getNestedChildren(eachItem.options))
+        } else {
+          return eachItem;
+        }
+      } else {
+        eachItem.type = 'OPTION'
+        if (eachItem.items != null) {
+          eachItem.children.push(this.getNestedChildren(eachItem.items))
+        } else {
+          return eachItem
+        }
+      }
+    }
+    return items;
+  }
+
+  ngOnInit() {
+    this.dialogRef.updateSize('80%', '80%');
+    this.dialogRef.disableClose = true;
+    if (this.data !== undefined || this.data !== null) {
+      this.data.item.selfId = this.data.item.id;
+      this.data.item.expanded = true;
+      if(this.data.item.options !== undefined && this.data.item.options !== null && this.data.item.options.length>0){
+        this.data.item.children = this.getNestedChildren(this.data.item.options)
+      } else {
+        this.data.item.children = [];
+      }
+      this.props.push(this.data.item);
+      console.log(this.props);
+    } else {
+      this.props = [];
+    }
+  }
+
+}
+
+
+
+
+
+
+
 
 @Component({
   selector: "item.component",
