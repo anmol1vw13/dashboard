@@ -4,8 +4,6 @@ import { BrowserModule  } from '@angular/platform-browser';
 import { Routes, RouterModule } from '@angular/router';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
-import { ItemFlowComponent } from './item-flow/item-flow.component';
-import { PresentationsComponent } from './presentations/presentations.component';
 
 const routes: Routes =[
   {

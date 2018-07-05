@@ -1,6 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild, Inject } from '@angular/core';
 import { PresentationsService } from './presentations.service';
-import { ItemFlowComponent } from '../item-flow/item-flow.component';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource, MatSnackBar } from '@angular/material';
 import { CatalogueSearchRequest } from './presentation.model';
 import { ComboItemModalComponent } from '../comboitem/comboitem.component';
@@ -114,13 +113,6 @@ export class PresentationsComponent implements OnInit {
 
   openItemFlow(item) {
 
-    let dialogRef = this.dialog.open(ItemFlowComponent, {
-      height: '400px',
-      width: '600px',
-      data: {
-        item: item
-      }
-    });
   }
 
   createPresentation() {
