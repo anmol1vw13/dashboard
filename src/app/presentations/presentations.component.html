@@ -27,9 +27,21 @@
             </span>
             <ng-template #static_content>
               <mat-table #table [dataSource]="itemPresentation.items">
-
-
+               
+                <!-- Active status Column -->
+                <ng-container matColumnDef="activate">
+                    <mat-header-cell *matHeaderCellDef> ActiveStatus </mat-header-cell>
+                    <mat-cell *matCellDef="let item"> 
+                        <span *ngIf="item.active">
+                          <mat-icon>visibility</mat-icon>
+                        </span>
+                        <span *ngIf="item.active == false">
+                            <mat-icon>visibility_off</mat-icon>
+                          </span>    
+                    </mat-cell>
+                </ng-container>
                 <!-- Position Column -->
+
                 <ng-container matColumnDef="id">
                   <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
                   <mat-cell *matCellDef="let item"> {{item.id}} </mat-cell>
@@ -74,6 +86,7 @@
                     <mat-icon style="top: 6px;position:relative; cursor: pointer;" (click)="deleteItemFromPresentation(presentation.id,item.id,itemPresentation)">delete</mat-icon>
                   </mat-cell>
                 </ng-container>
+                 
 
 
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

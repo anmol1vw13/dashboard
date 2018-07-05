@@ -77,7 +77,6 @@ export class PresentationsComponent implements OnInit {
   openEditItem(item) {
     let dialogRef = this.dialog.open(ComboItemModalComponent, {
       data: {
-        width: '150%',
         item: item
       }
     });
@@ -104,6 +103,7 @@ export class PresentationsComponent implements OnInit {
         (err) => {
           alert(err);
         }
+       
       )
 
 
@@ -111,7 +111,7 @@ export class PresentationsComponent implements OnInit {
 
   }
 
-  displayedColumns = ['id', 'name', 'sku', 'basePrice', 'defaultPrice', 'tags', 'expand'];
+  displayedColumns = ['activate','id', 'name', 'sku', 'basePrice', 'defaultPrice', 'tags', 'expand'];
 
   openItemFlow(item) {
 
@@ -130,10 +130,22 @@ export class PresentationsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result != undefined || result != null) {
+      if (result != undefined && result != null) {
         console.log(result);
-        let newItemPresentation = { 'name': result };
-        this.presentations.push(newItemPresentation);
+        let presentation = { name: result.name,description:result.description,shopId:shopId, type:result.presentationType,itemPresentations:[] };
+        presentation.itemPresentations.push({type:result.itemPresentationType});
+        this.loading = true;
+        this._presentationService.addPresentation(presentation).subscribe((data)=>{
+          console.log(data);
+          this.presentations.push(data.presentation);
+          console.log(this.presentations);
+          this.loading = false;
+        },(err)=>{
+          console.log(err);
+          this.loading = false;
+        });  
+
+        
       }
     });
   }
@@ -235,8 +247,12 @@ export class AddItemToPresentation implements OnInit {
 
     let selectedItemsAddedToList = false;
     let presentationRequest = JSON.parse(JSON.stringify(this.data.presentation));
+    let chosenItemPresentation;
     presentationRequest.itemPresentations.forEach((itemPresentation, index) => {
       if (index == this.data.itemPresentationIndex) {
+        if(itemPresentation.itemIds==undefined ||itemPresentation.itemIds == null ){
+          itemPresentation.itemIds=[]
+        }
         this.selectedItems.forEach((item, index) => {
           itemPresentation.itemIds.push(item.id);
         });
@@ -249,7 +265,7 @@ export class AddItemToPresentation implements OnInit {
         itemPresentation.items.splice(0, itemPresentation.items.length);
       }
       this.loading = true;
-      this._presentationsService.updatePresentation(this.data.presentation).subscribe(
+      this._presentationsService.updatePresentation(presentationRequest).subscribe(
         response => {
           if (response.success) {
             this.data.presentation = response.presentation
@@ -284,12 +300,17 @@ export class AddItemToPresentation implements OnInit {
 @Component({
   selector: 'createPresentation',
   templateUrl: './createPresentation.component.html',
+  providers:[PresentationsService]
 })
 export class CreatePresentationComponent {
 
   name: string = '';
+  presentationType:string = 'STATIC';
+  itemPresentationType:string= 'STATIC';
+  description:string='';
+
   constructor(
-    public dialogRef: MatDialogRef<CreatePresentationComponent>,
+    public dialogRef: MatDialogRef<CreatePresentationComponent>, private _presentationsService:PresentationsService,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   onNoClick(): void {
@@ -297,7 +318,18 @@ export class CreatePresentationComponent {
   }
 
   createPresentation() {
-    this.dialogRef.close(this.name);
+    if(this.name.trim() == ''){
+      console.log(this.name+" "+this.presentationType)
+      return;
+    }
+    
+    let data={
+      name: this.name,
+      description:this.description,
+      presentationType: this.presentationType,
+      itemPresentationType:this.itemPresentationType
+    }
+    this.dialogRef.close(data);
   }
 
 }

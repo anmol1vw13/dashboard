@@ -4,6 +4,25 @@
             <mat-form-field>
                 <input matInput [(ngModel)]="name" placeholder="Presentation Name">
             </mat-form-field>
+            <mat-form-field>
+                    <input matInput [(ngModel)]="description" placeholder="Presentation Description">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-select [(value)]="presentationType" placeholder="Presentation type">
+                    <mat-option value="STATIC">
+                        Static
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                    <mat-select [(value)]="itemPresentationType" placeholder="ItemPresentation type">
+                        <mat-option value="STATIC">
+                            Static
+                        </mat-option>
+                    </mat-select>
+            </mat-form-field>
+
+            
         </div>
     </div>
     <div class="col-md-12">
