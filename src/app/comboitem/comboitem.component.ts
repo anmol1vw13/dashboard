@@ -2,97 +2,42 @@ import { Component, OnInit, Inject, Pipe, PipeTransform, Injectable, ViewEncapsu
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialog, MatSnackBar } from '@angular/material';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UUID } from 'angular2-uuid';
-import { Item } from '../catalogue/catalogue.model';
 import { ComboItem, ComboOption, Parameter } from './comboitem.model';
 import { forEach } from '@angular/router/src/utils/collection';
 import { forwardRef, Input } from '@angular/core'
 import { IActionMapping } from 'angular-tree-component';
 import { ComboitemService } from './comboitem.service';
 
-@Injectable()
-export class SharedService {
 
-  component: ComboitemComponent;
-  constructor() { }
-}
 
-@Component({
-  selector: 'prop-item',
-  template: `
-  
-  <div style = "display:table-cell;overflow:hidden;" >
-    <div style="height:100%;margin-bottom: 15%;" *ngFor="let childProp of prop.children">
-    <span *ngIf="childProp.type == 'ITEM'">
-    <button mat-flat-button (click)="selectedProp(childProp)" color="warn">{{childProp.name}}</button>
-    </span>
-    <span *ngIf="childProp.type == 'OPTION'">
-        <button mat-flat-button (click)="selectedProp(childProp)" color="primary">{{childProp.name}}</button>
-    </span>
-      <prop-item  [prop]="childProp"></prop-item>
-    </div>
-  </div> 
-`
-})
-export class PropItem {
-  @Input() prop;
-
-  constructor(private sharedService: SharedService) {
-
-  }
-
-  selectedProp(prop) {
-    if (this.sharedService.component) {
-      this.sharedService.component.selectedProp(prop);
-    }
-  }
-}
 @Component({
   selector: 'app-comboitem',
   templateUrl: './comboitem.component.html',
   styleUrls: ['./comboitem.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  providers:[ComboitemService]
+  providers: [ComboitemService]
 })
 export class ComboitemComponent implements OnInit {
 
-  constructor(public dialog: MatDialog, private sharedService: SharedService, public snackBar: MatSnackBar, private _comboitemservice:ComboitemService) {
-    this.sharedService.component = this;
+  constructor(public dialog: MatDialog, public snackBar: MatSnackBar, private _comboitemservice: ComboitemService) {
+
   }
   addItemShow = true;
   addOptionShow = false;
   selectedParentProp = null;
   props = [];
-  @Input('properties') properties : any;
+  @Input('properties') properties: any;
+  loading: boolean = false;
 
-  getNestedChildren(items) {
-    for (let eachItem of items) {
-      eachItem.children = [];
-      if (eachItem.type == 'ITEM') {
-        if (eachItem.options != null) {
-          eachItem.children.push(this.getNestedChildren(eachItem.options))
-        } else {
-          return eachItem;
-        }
-      } else {
-        eachItem.type == 'OPTION'
-        if (eachItem.items != null) {
-          eachItem.children.push(this.getNestedChildren(eachItem.items))
-        } else {
-          return eachItem
-        }
-      }
-    }
-    return items;
-
-  }
   ngOnInit() {
     this.addItemShow = true;
     this.addOptionShow = false;
-      this.props = [];
-      console.log(this.properties);
-      if(this.properties != undefined && this.properties.length>0){
-        this.props = this.properties;
-      }
+    this.props = [];
+    console.log(this.properties);
+    if (this.properties != undefined && this.properties.length > 0) {
+      this.props = this.properties;
+      this.selectedProp(this.props[0]);
+    }
   }
 
   actionMapping: IActionMapping = {
@@ -102,6 +47,7 @@ export class ComboitemComponent implements OnInit {
     }
   }
   openItemDialog(edit) {
+    console.log(this.selectedParentProp);
 
     const dialogRef = this.dialog.open(ItemComponent, {
       data: {
@@ -114,6 +60,8 @@ export class ComboitemComponent implements OnInit {
     dialogRef.afterClosed().subscribe(
       data => {
         if (data != undefined) {
+          console.log(data);
+          console.log(this.selectedParentProp);
 
           if (edit) {
             this.selectedParentProp.name = data.name,
@@ -122,6 +70,9 @@ export class ComboitemComponent implements OnInit {
               this.selectedParentProp.sku = data.sku,
               this.selectedParentProp.mrp = data.mrp,
               this.selectedParentProp.basePrice = data.basePrice
+            this.selectedParentProp.active = data.active;
+            this.selectedParentProp.parameters = data.parameters;
+            this.addStyle(this.selectedParentProp);
           } else {
             console.log("Dialog output:", data)
             this.addToProps(data);
@@ -138,17 +89,17 @@ export class ComboitemComponent implements OnInit {
       propToAdd.children = [];
     }
 
-    if(this.selectedParentProp != null && this.selectedParentProp.children.length == 0 && propToAdd.type == 'ITEM'){
-      propToAdd.styleClass='department-cto';
-      propToAdd.defaultItem= true;
+    if (this.selectedParentProp != null && this.selectedParentProp.children.length == 0 && propToAdd.type == 'ITEM') {
+      propToAdd.defaultItem = true;
     }
-
+    this.addStyle(propToAdd);
     if (this.selectedParentProp == null) {
       this.props.push(propToAdd);
       this.selectedProp(propToAdd);
-    } else {      
+    } else {
       this.selectedParentProp.children.push(propToAdd);
     }
+
   }
 
   showItem() {
@@ -174,9 +125,9 @@ export class ComboitemComponent implements OnInit {
         if (data != undefined) {
           if (edit) {
             this.selectedParentProp.name = data.name;
-            console.log(this.props);
+            this.selectedParentProp.active = data.active;
+            this.addStyle(this.selectedParentProp);
           } else {
-            console.log("Dialog output:", data)
             this.addToProps(data);
           }
         }
@@ -190,14 +141,19 @@ export class ComboitemComponent implements OnInit {
     this.selectedProp(prop);
   }
 
-  addStyle(){
-    if(this.selectedParentProp.defaultItem){
-      this.selectedParentProp.styleClass = 'department-cto';
+  addStyle(props) {
+    if (props.defaultItem) {
+      props.styleClass = 'department-cto';
+    } else if (!props.active) {
+      props.expanded = false;
+      props.styleClass = 'inactive-item';
     } else {
-      this.selectedParentProp.styleClass = '';
+      props.styleClass = '';
     }
 
   }
+
+
 
   selectedProp(prop) {
 
@@ -221,12 +177,16 @@ export class ComboitemComponent implements OnInit {
   saveProps() {
 
     if (this.validateProps()) {
-      console.log('Saving');
+      this.loading = true;
       this.convertPropsChildren(this.props);
-      console.log(JSON.stringify(this.props));
-      this._comboitemservice.addNestedItem(this.props[0],407).subscribe(data => {
-          console.log(data);
-      });
+      console.log(this.props);
+      this._comboitemservice.addNestedItem(this.props[0], 407).subscribe(data => {
+        this.loading = false;
+        this.snackBar.open('Saved Successfully', 'OK');
+      }, (err) => {
+        this.loading = false;
+        this.snackBar.open('Error in saving', 'OK');
+      })
     }
   }
 
@@ -289,19 +249,17 @@ export class ComboitemComponent implements OnInit {
       if (prop.children == undefined || prop.children.length == 0) {
         continue;
       } else if (prop.type == 'ITEM') {
-        prop.options.push(prop.children);
+
+        prop.options = prop.children;
         this.convertPropsChildren(prop.options)
       } else if (prop.type == 'OPTION') {
-        prop.items.push(prop.children);
+        prop.items = prop.children;
         this.convertPropsChildren(prop.items);
       }
     }
   }
 
 }
-
-
-
 
 
 @Component({
@@ -316,7 +274,7 @@ export class ComboitemComponent implements OnInit {
 export class ComboItemModalComponent implements OnInit {
 
 
-  constructor(public dialogRef: MatDialogRef<any>, public dialog: MatDialog, private sharedService: SharedService, public snackBar: MatSnackBar, @Inject(MAT_DIALOG_DATA) public data : any) {
+  constructor(public dialogRef: MatDialogRef<any>, public dialog: MatDialog, public snackBar: MatSnackBar, @Inject(MAT_DIALOG_DATA) public data: any) {
     //this.sharedService.component = this;
   }
 
@@ -328,16 +286,15 @@ export class ComboItemModalComponent implements OnInit {
       eachItem.children = [];
       eachItem.selfId = eachItem.id;
       if (eachItem.type == 'ITEM') {
-        if(eachItem.defaultItem){
-          eachItem.styleClass = 'department-cto';
-        }
+        this.addStyle(eachItem);
         if (eachItem.options != null) {
           eachItem.children.push(this.getNestedChildren(eachItem.options))
         } else {
           return eachItem;
         }
       } else {
-        eachItem.type = 'OPTION'
+        eachItem.type = 'OPTION';
+        this.addStyle(eachItem);
         if (eachItem.items != null) {
           eachItem.children.push(this.getNestedChildren(eachItem.items))
         } else {
@@ -354,16 +311,28 @@ export class ComboItemModalComponent implements OnInit {
     if (this.data !== undefined || this.data !== null) {
       this.data.item.selfId = this.data.item.id;
       this.data.item.expanded = true;
-      if(this.data.item.options !== undefined && this.data.item.options !== null && this.data.item.options.length>0){
+      if (this.data.item.options !== undefined && this.data.item.options !== null && this.data.item.options.length > 0) {
         this.data.item.children = this.getNestedChildren(this.data.item.options)
       } else {
         this.data.item.children = [];
       }
+      this.addStyle(this.data.item);
       this.props.push(this.data.item);
-      console.log(this.props);
     } else {
       this.props = [];
     }
+  }
+
+  addStyle(props) {
+    if (props.type == 'ITEM' && props.defaultItem) {
+      props.styleClass = 'department-cto';
+    } else if (!props.active) {
+      props.expanded = false;
+      props.styleClass = 'inactive-item';
+    } else {
+      props.styleClass = '';
+    }
+
   }
 
 }
@@ -385,7 +354,7 @@ export class ItemComponent implements OnInit {
 
   })
 
-  itemTags : Array<Parameter>=[];
+  itemTags: Array<Parameter> = [];
   constructor(
     public dialogRef: MatDialogRef<ItemComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -395,7 +364,7 @@ export class ItemComponent implements OnInit {
 
   ngOnInit() {
     if (this.data.edit) {
-      this.editForm()
+      this.editForm();
     } else {
       this.createForm();
     }
@@ -403,25 +372,25 @@ export class ItemComponent implements OnInit {
   }
 
 
-  addTags(event){
-    if(event.keyCode!=32)
+  addTags(event) {
+    if (event.keyCode != 32)
       return;
-     let tag = this.itemForm.get('tags').value;
-     this.itemForm.patchValue({'tags':''});
-     if(tag == undefined || tag == null || tag.trim().length == 0 ){
-       return;
-     }
+    let tag = this.itemForm.get('tags').value;
+    this.itemForm.patchValue({ 'tags': '' });
+    if (tag == undefined || tag == null || tag.trim().length == 0) {
+      return;
+    }
 
-     if(this.itemTags.indexOf(tag)==-1){
-       let parameter = new Parameter();
-       parameter.name=tag;
-       parameter.type="TAG";
+    if (this.itemTags.indexOf(tag) == -1) {
+      let parameter = new Parameter();
+      parameter.name = tag;
+      parameter.type = "TAG";
       this.itemTags.push(parameter);
-     }
+    }
   }
 
-  deleteTag(tag){
-    this.itemTags.splice(this.itemTags.indexOf(tag),1);
+  deleteTag(tag) {
+    this.itemTags.splice(this.itemTags.indexOf(tag), 1);
   }
 
   createForm() {
@@ -432,10 +401,11 @@ export class ItemComponent implements OnInit {
       mrp: ['0'],
       sku: [''],
       barcodeId: [''],
-      tags:'',
-      hsncode:['rate2.5', Validators.required],
-      cgst:[2.5,Validators.required],
-      sgst:[2.5,Validators.required]
+      tags: '',
+      hsncode: ['rate2.5', Validators.required],
+      cgst: [2.5, Validators.required],
+      sgst: [2.5, Validators.required],
+      active: [true]
     })
   }
 
@@ -448,13 +418,19 @@ export class ItemComponent implements OnInit {
       sku: this.data.selectedParentProp.sku,
       mrp: this.data.selectedParentProp.mrp,
       basePrice: this.data.selectedParentProp.basePrice,
-      tags:'',
-      hsncode:this.data.selectedParentProp.hsncode,
-      cgst:this.data.selectedParentProp.cgst,
-      sgst:this.data.selectedParentProp.sgst
+      tags: '',
+      hsncode: this.data.selectedParentProp.hsncode,
+      cgst: this.data.selectedParentProp.cgst,
+      sgst: this.data.selectedParentProp.sgst,
+      active: this.data.selectedParentProp.active
     })
 
+    if (this.data.selectedParentProp.parameters === undefined || this.data.selectedParentProp.parameters === null) {
+      this.data.selectedParentProp.parameters = [];
+    }
     this.itemTags = this.data.selectedParentProp.parameters;
+
+
   }
 
 
@@ -471,16 +447,17 @@ export class ItemComponent implements OnInit {
     item.sgst = this.itemForm.get('sgst').value;
     item.type = 'ITEM';
     item.selfId = UUID.UUID();
-    item.parameters = this.itemTags
+    item.parameters = this.itemTags;
+    item.active = this.itemForm.get('active').value;
 
-    
+
     if (this.data.selectedParentProp != null) {
       item.parentId = this.data.selectedParentProp.selfId;
     }
-    if(this.data.selectedParentProp == undefined || this.data.selectedParentProp == null){
+    if (this.data.selectedParentProp == undefined || this.data.selectedParentProp == null) {
       item.sellingType = "OPEN"
-    }else{
-      item.sellingType ="HIDDEN"
+    } else {
+      item.sellingType = "HIDDEN"
     }
     this.dialogRef.close(item);
   }
@@ -517,14 +494,16 @@ export class OptionComponent implements OnInit {
 
   createForm() {
     this.optionForm = this.formBuilder.group({
-      name: ['', Validators.required]
+      name: ['', Validators.required],
+      active: [true]
     })
   }
 
   editForm() {
     this.createForm();
     this.optionForm.setValue({
-      name: this.data.selectedParentProp.name
+      name: this.data.selectedParentProp.name,
+      active: this.data.selectedParentProp.active
     })
   }
 
@@ -534,6 +513,7 @@ export class OptionComponent implements OnInit {
     option.name = this.optionForm.get('name').value;
     option.type = 'OPTION';
     option.selfId = UUID.UUID();
+    option.active = this.optionForm.get('active').value;
     if (this.data.selectedParentProp != null) {
       option.parentId = this.data.selectedParentProp.selfId;
     }

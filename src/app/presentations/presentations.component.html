@@ -3,10 +3,12 @@
     <h3>
       <u>Item Presentations</u>
     </h3>
-    <div class="row">
-      <button mat-fab color="primary" style="margin-left: 1%; margin-bottom: 1%" matTooltip="Create Presentation" (click)="createPresentation()">+</button>
-      <mat-progress-bar style="position: sticky;top:0;align-self: flex-start;" *ngIf="loading" style="margin-bottom: 2%;margin-top: 2%;"
+    <button mat-fab color="primary" style="margin-left: 1%; margin-bottom: 1%" matTooltip="Create Presentation" (click)="createPresentation()">+</button>
+    <button mat-raised-button color="primary" style="margin-left: 1%; margin-bottom: 1%" matTooltip="Sort Items Order" (click)="sorting=!sorting">Reorder List</button>
+
+    <mat-progress-bar style="position: sticky;top:0;align-self: flex-start;" *ngIf="loading" style="margin-bottom: 2%;margin-top: 2%;"
       mode="indeterminate"></mat-progress-bar>
+    <div class="row" *ngIf="!sorting">
       <mat-accordion style="width:100%;" *ngFor="let presentation of presentations">
         <mat-expansion-panel>
           <mat-expansion-panel-header class="right-aligned-header">
@@ -27,18 +29,18 @@
             </span>
             <ng-template #static_content>
               <mat-table #table [dataSource]="itemPresentation.items">
-               
+
                 <!-- Active status Column -->
                 <ng-container matColumnDef="activate">
-                    <mat-header-cell *matHeaderCellDef> ActiveStatus </mat-header-cell>
-                    <mat-cell *matCellDef="let item"> 
-                        <span *ngIf="item.active">
-                          <mat-icon>visibility</mat-icon>
-                        </span>
-                        <span *ngIf="item.active == false">
-                            <mat-icon>visibility_off</mat-icon>
-                          </span>    
-                    </mat-cell>
+                  <mat-header-cell *matHeaderCellDef> ActiveStatus </mat-header-cell>
+                  <mat-cell *matCellDef="let item">
+                    <span *ngIf="item.active">
+                      <mat-icon>visibility</mat-icon>
+                    </span>
+                    <span *ngIf="item.active == false">
+                      <mat-icon>visibility_off</mat-icon>
+                    </span>
+                  </mat-cell>
                 </ng-container>
                 <!-- Position Column -->
 
@@ -86,7 +88,7 @@
                     <mat-icon style="top: 6px;position:relative; cursor: pointer;" (click)="deleteItemFromPresentation(presentation.id,item.id,itemPresentation)">delete</mat-icon>
                   </mat-cell>
                 </ng-container>
-                 
+
 
 
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -97,8 +99,13 @@
 
         </mat-expansion-panel>
       </mat-accordion>
-
-
+    </div>
+    <div *ngIf="sorting" class="row" [sortablejs]="presentations">
+      <div class="col-sm-12" *ngFor="let presentation of presentations">
+        <div class="card" style="margin-bottom: 0.3rem; margin-top: 0.3rem;">
+          <div class="card-header">{{ presentation.name }}<span style="float: right;"><mat-icon>drag_indicator</mat-icon></span></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

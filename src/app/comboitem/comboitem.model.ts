@@ -17,6 +17,7 @@ export class ComboItem {
     cgst:Number;
     sgst:Number;
     defaultItem : boolean = false;
+    active : boolean;
 }
 
 export class ComboOption{
@@ -27,6 +28,7 @@ export class ComboOption{
     children:Array<Object>;
     items:Array<Object>=[];
     expanded:boolean=true;
+    active:boolean;
 }
 
 export class Parameter{

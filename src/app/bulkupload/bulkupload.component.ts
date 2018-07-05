@@ -116,7 +116,7 @@ export class BulkuploadComponent implements OnInit {
   }
 
   instatiateEmptyData() {
-
+    this.dataset = [];
     for (let i = 0; i < 25; i++) {
       this.dataset.push({ 'productName': '', 'productDescription': '', 'category': '', 'sku': '', 'productMrp': '', 'shopPrice': '', 'cgst': '', 'sgst': '', 'hsn': '', 'tags': '','presentationHeader':'' })
 
@@ -197,7 +197,12 @@ export class BulkuploadComponent implements OnInit {
 
     this.bulkUploadService.uploadItemsInBulk(shopId, itemPostArr).subscribe((data: any) => {
       this.saving = false;
-      this.instatiateEmptyData();
+      if(data.success){
+        let snackBarRef = this.snackBar.open(data.message, 'OK');
+        this.instatiateEmptyData();
+      } else {
+        let snackBarRef = this.snackBar.open(data.message, 'OK');
+      }
     }, (err : any) => {
       let snackBarRef = this.snackBar.open('Error in saving items', 'OK');
     })

@@ -12,6 +12,8 @@ import { AppComponent } from './app.component';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { BrowserModule } from '@angular/platform-browser';
+import { SortablejsModule } from 'angular-sortablejs';
+
 
 @NgModule({
   imports: [
@@ -21,7 +23,9 @@ import { BrowserModule } from '@angular/platform-browser';
     BrowserModule,
     ComponentsModule,
     RouterModule,
-    AppRoutingModule
+    AppRoutingModule,
+    SortablejsModule.forRoot({ animation: 150 }),
+
   ],
   declarations: [
     AppComponent,

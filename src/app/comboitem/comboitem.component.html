@@ -1,8 +1,8 @@
 <div class="main-content">
   <div class="container-fluid">
-
+    <mat-progress-bar style="position: sticky;top:0;align-self: flex-start;" *ngIf="loading" mode="indeterminate"></mat-progress-bar>
     <mat-card>
-      <mat-card-title>Create Combos</mat-card-title>
+      <mat-card-title>Create Combo Item</mat-card-title>
       <mat-card-content>
         <div style="margin-bottom: 5%">
           <ng-container *ngIf="addItemShow">
@@ -18,52 +18,26 @@
           <ng-container *ngIf="selectedParentProp && addOptionShow">
             <button mat-flat-button (click)="removeItemOrOption()" style="float:right;">Remove Item</button>
             <button mat-flat-button (click)="openItemDialog(true)">Edit Item</button>
-            <mat-checkbox style="margin-left: 3%" [(ngModel)]="selectedParentProp.defaultItem" (change)="addStyle()">Set as Default Item</mat-checkbox>
+            <mat-checkbox style="margin-left: 3%" [(ngModel)]="selectedParentProp.defaultItem" (change)="addStyle(selectedParentProp)">Set as Default Item</mat-checkbox>
           </ng-container>
         </div>
-        <!-- <div style="overflow: hidden;display:table;">
-      <div style = "display:table-cell;width:100px;vertical-align: middle" *ngFor="let propList of getPropValues()">
-        <div style="height:50px;"*ngFor="let prop of propList">
-          <button mat-flat-button (click)="selectedProp(prop)">{{prop.name}}</button>
-        </div>
-      </div>
-      
-      <div style="display:table-cell;overflow:hidden;" >
-        <div style="height:100%;margin-bottom: 15%;" *ngFor="let prop of props">
-          <span *ngIf="prop.type == 'ITEM'">
-          <button mat-flat-button (click)="selectedProp(prop)" color="warn">{{prop.name}}</button>
-          </span>
-          <span *ngIf="prop.type == 'OPTION'">
-              <button mat-flat-button (click)="selectedProp(prop)" color="primary">{{prop.name}}</button>
-          </span>
-          <prop-item [prop]="prop"></prop-item>
-        </div>  
-      </div>
-    </div> -->
 
-        <!-- <div class="row" style="margin: 5% 41%;"> -->
         <div class="row" style="overflow-x: scroll">
-
           <p-organizationChart [value]="props" selectionMode="single" [(selection)]="selectedParentProp" (onNodeSelect)="selectedPropViaEvent($event)">
             <ng-template let-node pTemplate="ITEM">
               <span style="font-weight:bold">{{node.name}}
-                
-                <!-- <i class="material-icons" style="display: inline;line-height: 0%">view list</i> -->
               </span>
             </ng-template>
             <ng-template let-node pTemplate="OPTION">
               <span>{{node.name}}
-                <!-- <i class="material-icons" style="display: inline;line-height: 0%">view list</i> -->
               </span>
             </ng-template>
 
           </p-organizationChart>
         </div>
-
         <div style="margin-top: 5%" *ngIf="props.length>0">
-          <button mat-flat-button (click)="saveProps()">Save</button>
+          <button mat-flat-button (click)="saveProps()">Save changes</button>
         </div>
-
       </mat-card-content>
     </mat-card>
   </div>

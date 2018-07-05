@@ -48,8 +48,9 @@ import { DashboardModule } from '../../dashboard/dashboard.module';
 
 import { PresentationsComponent, AddItemToPresentation, CreatePresentationComponent } from '../../presentations/presentations.component';
 import { BulkuploadComponent, ErrorDialog } from '../../bulkupload/bulkupload.component';
-import { ComboitemComponent, ItemComponent, OptionComponent, PropItem, SharedService, ComboItemModalComponent } from '../../comboitem/comboitem.component';
+import { ComboitemComponent, ItemComponent, OptionComponent, ComboItemModalComponent } from '../../comboitem/comboitem.component';
 import { TreeModule } from 'angular-tree-component';
+import { SortablejsModule } from 'angular-sortablejs/dist';
 
 @NgModule({
   imports: [
@@ -82,7 +83,8 @@ import { TreeModule } from 'angular-tree-component';
     MatProgressBarModule,
     TreeModule,
     OrganizationChartModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    SortablejsModule
     ],
   entryComponents: [
     AddItemToPresentation,
@@ -108,11 +110,9 @@ import { TreeModule } from 'angular-tree-component';
     ComboitemComponent,
     ItemComponent,
     OptionComponent,
-    PropItem,
     CreatePresentationComponent,
     ComboItemModalComponent
   ],
-  providers:[SharedService]
 })
 
 export class AdminLayoutModule {}

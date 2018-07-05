@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { getPresentations, removeItemsFromPresentation, updatePresentation, addPresentation } from 'config/config';
+import { getPresentations, removeItemsFromPresentation, updatePresentation, addPresentation,searchItem } from 'config/config';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/observable/throw';
+import { CatalogueSearchRequest } from './presentation.model';
 
 @Injectable()
 export class PresentationsService {
@@ -17,6 +18,15 @@ export class PresentationsService {
   newHeaders = new HttpHeaders({})
   constructor(public http: HttpClient) {
     this.headers = this.headers.set('Content-Type', 'application/json');
+  }
+
+  searchItem(data: CatalogueSearchRequest){
+    return this.http.post(searchItem, data, {headers: this.headers})
+    .map((res:Response) => {
+      return res;
+    }).catch((err:any) =>{
+      return Observable.throw(err)
+    })
   }
 
   getPresentations(shopId: number) {

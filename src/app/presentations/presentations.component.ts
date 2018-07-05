@@ -1,11 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild, Inject } from '@angular/core';
-import { DataSource } from '@angular/cdk/table';
 import { PresentationsService } from './presentations.service';
 import { ItemFlowComponent } from '../item-flow/item-flow.component';
-import { MatTable, MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource, MatSnackBar } from '@angular/material';
-import { CatalogueSearchRequest } from '../catalogue/catalogue.model';
-import { CatalogueService } from '../catalogue/catalogue.service';
-import { ComboitemComponent, ComboItemModalComponent } from '../comboitem/comboitem.component';
+import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource, MatSnackBar } from '@angular/material';
+import { CatalogueSearchRequest } from './presentation.model';
+import { ComboItemModalComponent } from '../comboitem/comboitem.component';
 
 
 let shopId: number = 407;
@@ -22,6 +20,7 @@ export class PresentationsComponent implements OnInit {
   loading: boolean = false;
   presentations = []
   selectedRowIndexes = []
+  sorting : boolean = false;
   // @ViewChild(MatTable) table: MatTable<any>;
   constructor(private _presentationService: PresentationsService, private _changeDetectorRef: ChangeDetectorRef, public dialog: MatDialog) {
 
@@ -39,7 +38,6 @@ export class PresentationsComponent implements OnInit {
       data: { presentation: presentation, itemPresentationIndex: itemPresentationIndex }
     });
     addDialogPresentation.afterClosed().subscribe((data) => {
-      console.log('data', data);
       if (data !== undefined && data !== null) {
         console.log('Presentation Index',this.presentations.indexOf(presentation))
         this.presentations[this.presentations.indexOf(presentation)] = data;
@@ -75,9 +73,10 @@ export class PresentationsComponent implements OnInit {
   }
 
   openEditItem(item) {
+    let items = item;
     let dialogRef = this.dialog.open(ComboItemModalComponent, {
       data: {
-        item: item
+        item: items
       }
     });
   }
@@ -156,7 +155,7 @@ export class PresentationsComponent implements OnInit {
 @Component({
   selector: 'addItemToPresentation',
   templateUrl: './addItemToPresentation.html',
-  providers: [PresentationsService, CatalogueService]
+  providers: [PresentationsService]
 })
 export class AddItemToPresentation implements OnInit {
 
@@ -167,7 +166,6 @@ export class AddItemToPresentation implements OnInit {
   selectedItemsDisplayedColumns = ['id', 'name', 'sku', 'basePrice', 'delete'];
   constructor(
     public dialogRef: MatDialogRef<AddItemToPresentation>,
-    private _catalogueService: CatalogueService,
     private _presentationsService: PresentationsService,
     public snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -194,7 +192,7 @@ export class AddItemToPresentation implements OnInit {
     let request: CatalogueSearchRequest = { 'shopId': shopId.toString(), "name": searchParam }
 
     this.loading = true;
-    let searchObservable = this._catalogueService.searchItem(request).subscribe(response => {
+    let searchObservable = this._presentationsService.searchItem(request).subscribe(response => {
       this.loading = false;
       this.items = response
     })
