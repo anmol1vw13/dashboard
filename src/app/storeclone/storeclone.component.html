@@ -1,0 +1,39 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <h3>
+      <u>Store Cloning</u>
+    </h3>
+    <p>
+      <mat-icon style="color:red">warning</mat-icon> Note : Store cloning copies the presentation data of the source store to target store. If the target
+      store already has presentations, those presentations will get deleted and all presentations from source store gets
+      copied</p>
+    <mat-progress-bar style="position: sticky;top:0;align-self: flex-start;" *ngIf="loading" style="margin-bottom: 2%;margin-top: 2%;"
+      mode="indeterminate"></mat-progress-bar>
+    <div class="row">
+      <div class="col-md-5">
+        <mat-form-field>
+          <mat-select placeholder="Source Store" [(ngModel)]="sourceStore">
+            <mat-option *ngFor="let store of stores" [value]="store.value">
+              {{store.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-2" style="text-align: center">
+        <mat-icon style="font-size: 3rem;">trending_flat</mat-icon>
+      </div>
+      <div class="col-md-5">
+        <mat-form-field>
+          <mat-select placeholder="Target Store" [(ngModel)]="targetStore">
+            <mat-option *ngFor="let store of stores" [value]="store.value">
+              {{store.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <button mat-raised-button color="primary" (click)="startCopying()">Start Copying</button>
+    </div>
+  </div>
+</div>

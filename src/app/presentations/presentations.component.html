@@ -5,6 +5,8 @@
     </h3>
     <button mat-fab color="primary" style="margin-left: 1%; margin-bottom: 1%" matTooltip="Create Presentation" (click)="createPresentation()">+</button>
     <button mat-raised-button color="primary" style="margin-left: 1%; margin-bottom: 1%" matTooltip="Sort Items Order" (click)="sorting=!sorting">Reorder List</button>
+    <button *ngIf="sorting" mat-raised-button color="primary" style="margin-left: 1%; margin-bottom: 1%" matTooltip="Save Order"
+      (click)="saveOrder()">Save Ordering</button>
 
     <mat-progress-bar style="position: sticky;top:0;align-self: flex-start;" *ngIf="loading" style="margin-bottom: 2%;margin-top: 2%;"
       mode="indeterminate"></mat-progress-bar>
@@ -18,6 +20,7 @@
             <mat-panel-description style="align-self: center">
               {{presentation.type}}
             </mat-panel-description>
+            <mat-slide-toggle style="margin-right: 2%" [(ngModel)]="presentation.active" (change)="updatePresentation(presentation)">Presentation Active Status</mat-slide-toggle>
           </mat-expansion-panel-header>
 
           <div *ngFor="let itemPresentation of presentation.itemPresentations; let itemPresentationIndex = index">
@@ -96,14 +99,17 @@
               </mat-table>
             </ng-template>
           </div>
-
         </mat-expansion-panel>
       </mat-accordion>
     </div>
     <div *ngIf="sorting" class="row" [sortablejs]="presentations">
       <div class="col-sm-12" *ngFor="let presentation of presentations">
         <div class="card" style="margin-bottom: 0.3rem; margin-top: 0.3rem;">
-          <div class="card-header">{{ presentation.name }}<span style="float: right;"><mat-icon>drag_indicator</mat-icon></span></div>
+          <div class="card-header">{{ presentation.name }}
+            <span style="float: right;">
+              <mat-icon>drag_indicator</mat-icon>
+            </span>
+          </div>
         </div>
       </div>
     </div>

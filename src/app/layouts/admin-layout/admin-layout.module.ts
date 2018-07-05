@@ -10,6 +10,8 @@ import { AdminLayoutRoutes } from './admin-layout.routing';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { HotTableModule } from '@handsontable/angular';
 import {OrganizationChartModule} from 'primeng/organizationchart';
+import { StorecloneComponent } from '../../storeclone/storeclone.component';
+
 
 
 
@@ -33,7 +35,8 @@ import {
   MatSnackBarModule,
   MatDividerModule,
   MatProgressBarModule,
-  MatCheckboxModule
+  MatCheckboxModule,
+  MatSlideToggleModule
 } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -74,7 +77,8 @@ import { SortablejsModule } from 'angular-sortablejs/dist';
     TreeModule,
     OrganizationChartModule,
     MatCheckboxModule,
-    SortablejsModule
+    SortablejsModule,
+    MatSlideToggleModule
     ],
   entryComponents: [
     AddItemToPresentation,
@@ -93,7 +97,8 @@ import { SortablejsModule } from 'angular-sortablejs/dist';
     ItemComponent,
     OptionComponent,
     CreatePresentationComponent,
-    ComboItemModalComponent
+    ComboItemModalComponent,
+    StorecloneComponent
   ],
 })
 

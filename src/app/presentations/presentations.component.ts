@@ -19,9 +19,9 @@ export class PresentationsComponent implements OnInit {
   loading: boolean = false;
   presentations = []
   selectedRowIndexes = []
-  sorting : boolean = false;
+  sorting: boolean = false;
   // @ViewChild(MatTable) table: MatTable<any>;
-  constructor(private _presentationService: PresentationsService, private _changeDetectorRef: ChangeDetectorRef, public dialog: MatDialog) {
+  constructor(private _presentationService: PresentationsService, private _changeDetectorRef: ChangeDetectorRef, public dialog: MatDialog, public snackBar: MatSnackBar) {
 
   }
 
@@ -38,7 +38,7 @@ export class PresentationsComponent implements OnInit {
     });
     addDialogPresentation.afterClosed().subscribe((data) => {
       if (data !== undefined && data !== null) {
-        console.log('Presentation Index',this.presentations.indexOf(presentation))
+        console.log('Presentation Index', this.presentations.indexOf(presentation))
         this.presentations[this.presentations.indexOf(presentation)] = data;
         console.log('Old', this.presentations);
         let newPresentation = JSON.parse(JSON.stringify(this.presentations));
@@ -101,7 +101,7 @@ export class PresentationsComponent implements OnInit {
         (err) => {
           alert(err);
         }
-       
+
       )
 
 
@@ -109,7 +109,7 @@ export class PresentationsComponent implements OnInit {
 
   }
 
-  displayedColumns = ['activate','id', 'name', 'sku', 'basePrice', 'defaultPrice', 'tags', 'expand'];
+  displayedColumns = ['activate', 'id', 'name', 'sku', 'basePrice', 'defaultPrice', 'tags', 'expand'];
 
   openItemFlow(item) {
 
@@ -123,22 +123,56 @@ export class PresentationsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result != undefined && result != null) {
         console.log(result);
-        let presentation = { name: result.name,description:result.description,shopId:shopId, type:result.presentationType,itemPresentations:[] };
-        presentation.itemPresentations.push({type:result.itemPresentationType});
+        let presentation = { name: result.name, description: result.description, shopId: shopId, type: result.presentationType, itemPresentations: [] };
+        presentation.itemPresentations.push({ type: result.itemPresentationType });
         this.loading = true;
-        this._presentationService.addPresentation(presentation).subscribe((data)=>{
+        this._presentationService.addPresentation(presentation).subscribe((data) => {
           console.log(data);
           this.presentations.push(data.presentation);
           console.log(this.presentations);
           this.loading = false;
-        },(err)=>{
+        }, (err) => {
           console.log(err);
           this.loading = false;
-        });  
+        });
 
-        
+
       }
     });
+  }
+
+  saveOrder() {
+    let presentationIds = this.presentations.map((eachPresentation: any) => {
+      return eachPresentation.id;
+    })
+    console.log(presentationIds);
+    this.loading = true;
+    this._presentationService.orderPresentation(presentationIds).subscribe((data: any) => {
+      this.loading = false;
+      this.snackBar.open('Presentations ordered successfully', 'OK')
+      this.presentations = data;
+      console.log(data);
+    }, (err) => {
+      this.loading = false;
+      this.snackBar.open('Error in Ordering Presentations', 'OK')
+
+    })
+  }
+
+
+  updatePresentation(presentation: any) {
+    this.loading = true;
+    this._presentationService.updatePresentation(presentation).subscribe(
+      response => {
+        if (response.success) {
+        } else {
+          this.snackBar.open(response.message, "Close");
+        }
+
+      }, (err) => {
+        this.loading = false;
+        this.snackBar.open("Error in updating status", "Close");
+      })
   }
 
 }
@@ -233,6 +267,7 @@ export class AddItemToPresentation implements OnInit {
     });
   }
 
+
   addItemsToPresentation() {
 
     let selectedItemsAddedToList = false;
@@ -240,8 +275,8 @@ export class AddItemToPresentation implements OnInit {
     let chosenItemPresentation;
     presentationRequest.itemPresentations.forEach((itemPresentation, index) => {
       if (index == this.data.itemPresentationIndex) {
-        if(itemPresentation.itemIds==undefined ||itemPresentation.itemIds == null ){
-          itemPresentation.itemIds=[]
+        if (itemPresentation.itemIds == undefined || itemPresentation.itemIds == null) {
+          itemPresentation.itemIds = []
         }
         this.selectedItems.forEach((item, index) => {
           itemPresentation.itemIds.push(item.id);
@@ -290,17 +325,17 @@ export class AddItemToPresentation implements OnInit {
 @Component({
   selector: 'createPresentation',
   templateUrl: './createPresentation.component.html',
-  providers:[PresentationsService]
+  providers: [PresentationsService]
 })
 export class CreatePresentationComponent {
 
   name: string = '';
-  presentationType:string = 'STATIC';
-  itemPresentationType:string= 'STATIC';
-  description:string='';
+  presentationType: string = 'STATIC';
+  itemPresentationType: string = 'STATIC';
+  description: string = '';
 
   constructor(
-    public dialogRef: MatDialogRef<CreatePresentationComponent>, private _presentationsService:PresentationsService,
+    public dialogRef: MatDialogRef<CreatePresentationComponent>, private _presentationsService: PresentationsService,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   onNoClick(): void {
@@ -308,16 +343,16 @@ export class CreatePresentationComponent {
   }
 
   createPresentation() {
-    if(this.name.trim() == ''){
-      console.log(this.name+" "+this.presentationType)
+    if (this.name.trim() == '') {
+      console.log(this.name + " " + this.presentationType)
       return;
     }
-    
-    let data={
+
+    let data = {
       name: this.name,
-      description:this.description,
+      description: this.description,
       presentationType: this.presentationType,
-      itemPresentationType:this.itemPresentationType
+      itemPresentationType: this.itemPresentationType
     }
     this.dialogRef.close(data);
   }

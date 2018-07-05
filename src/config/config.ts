@@ -8,6 +8,10 @@ export const removeItemsFromPresentation = API_ENDPOINT+"catalogue/presentations
 export const getPresentations = API_ENDPOINT+"catalogue/presentations/shop";
 export const updatePresentation = API_ENDPOINT+"catalogue/presentation/update";
 export const addPresentation = API_ENDPOINT+"catalogue/presentation/add";
+export const orderPresentation = API_ENDPOINT+"catalogue/presentations/priortize"
+
 
 export const uploadItemBulk = API_ENDPOINT+"catalogue/items/upload";
 export const addNestedItemAPI = API_ENDPOINT+"catalogue/item/nested/add";
+
+export const storeCloneAPI = API_ENDPOINT+"catalogue/clone";
