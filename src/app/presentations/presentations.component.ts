@@ -164,6 +164,7 @@ export class PresentationsComponent implements OnInit {
     this.loading = true;
     this._presentationService.updatePresentation(presentation).subscribe(
       response => {
+        this.loading = false;
         if (response.success) {
         } else {
           this.snackBar.open(response.message, "Close");

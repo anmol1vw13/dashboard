@@ -20,7 +20,7 @@
             <mat-panel-description style="align-self: center">
               {{presentation.type}}
             </mat-panel-description>
-            <mat-slide-toggle style="margin-right: 2%" [(ngModel)]="presentation.active" (change)="updatePresentation(presentation)">Presentation Active Status</mat-slide-toggle>
+            <mat-slide-toggle [disabled]="loading" style="margin-right: 2%" [(ngModel)]="presentation.active" (change)="updatePresentation(presentation)">Presentation Active Status</mat-slide-toggle>
           </mat-expansion-panel-header>
 
           <div *ngFor="let itemPresentation of presentation.itemPresentations; let itemPresentationIndex = index">

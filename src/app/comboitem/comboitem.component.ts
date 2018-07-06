@@ -3,8 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatDialog, MatSnackBar } from '@angular/
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UUID } from 'angular2-uuid';
 import { ComboItem, ComboOption, Parameter } from './comboitem.model';
-import { forEach } from '@angular/router/src/utils/collection';
-import { forwardRef, Input } from '@angular/core'
+import { Input } from '@angular/core'
 import { IActionMapping } from 'angular-tree-component';
 import { ComboitemService } from './comboitem.service';
 

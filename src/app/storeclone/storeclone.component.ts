@@ -25,6 +25,16 @@ export class StorecloneComponent implements OnInit {
   }
 
   startCopying(){
+
+    if(this.sourceStore.toString().trim().length == 0){
+      this.snackbar.open('Source Store cannot be empty', 'OK');
+      return;
+    }
+
+    if(this.targetStore.toString().trim().length == 0){
+      this.snackbar.open('Target Store cannot be empty', 'OK');
+      return;
+    }
     
     if(this.sourceStore === this.targetStore){
       this.snackbar.open('Source and Target Store cannot be the same', 'OK');
