@@ -4,6 +4,7 @@ import { HotTableRegisterer } from '@handsontable/angular'
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { BulkUploadService } from './bulkupload.service';
 import { MatSnackBar } from '@angular/material';
+import { AdminLayoutService } from '../layouts/admin-layout/admin-layout.service';
 
 
 
@@ -18,10 +19,12 @@ export class BulkuploadComponent implements OnInit {
 
   instance: string = 'hot';
   mandatoryColumns = ['Product Name*', 'Category*', 'Sku*', 'Product MRP*', 'Shop Price*', 'CGST Rate (%)*', 'SGST Rate (%)*']
-  colHeaders = ['Product Name*', 'Product Description', 'Category*', 'Sku*', 'Product MRP*', 'Shop Price*', 'CGST Rate (%)*', 'SGST Rate (%)*', 'HSN Code', 'Tags','Presentation Header'];
-  colWidths = ['200', '200', '150', '150', '150', '150', '150', '150', '150', '200','200']
+  colHeaders = ['Product Name*', 'Product Description', 'Category*', 'Sku*', 'Product MRP*', 'Shop Price*', 'CGST Rate (%)*', 'SGST Rate (%)*', 'HSN Code', 'Tags', 'Presentation Header'];
+  colWidths = ['200', '200', '150', '150', '150', '150', '150', '150', '150', '200', '200']
   dataset: any[] = []
   saving: boolean = false;
+  stores : any[] = []
+  selectedShopId : any = '';
 
   errMsgs: any[] = [];
 
@@ -109,16 +112,20 @@ export class BulkuploadComponent implements OnInit {
 
   }
 
-  constructor(private hotRegisterer: HotTableRegisterer, public dialog: MatDialog, public bulkUploadService: BulkUploadService, public snackBar: MatSnackBar) { }
+  constructor(private hotRegisterer: HotTableRegisterer, public dialog: MatDialog, public bulkUploadService: BulkUploadService, public snackBar: MatSnackBar, public _adminLayoutService: AdminLayoutService) { }
 
   ngOnInit() {
     this.instatiateEmptyData();
+    this.stores = this._adminLayoutService.getListOfStores();
+    if (this.stores != null) {
+      this.selectedShopId = this.stores[0].shopId;
+    }
   }
 
   instatiateEmptyData() {
     this.dataset = [];
     for (let i = 0; i < 25; i++) {
-      this.dataset.push({ 'productName': '', 'productDescription': '', 'category': '', 'sku': '', 'productMrp': '', 'shopPrice': '', 'cgst': '', 'sgst': '', 'hsn': '', 'tags': '','presentationHeader':'' })
+      this.dataset.push({ 'productName': '', 'productDescription': '', 'category': '', 'sku': '', 'productMrp': '', 'shopPrice': '', 'cgst': '', 'sgst': '', 'hsn': '', 'tags': '', 'presentationHeader': '' })
 
     }
 
@@ -139,7 +146,7 @@ export class BulkuploadComponent implements OnInit {
     for (let rowNum = 0; rowNum < hotConst.getSourceData().length; rowNum++) {
 
       if (!hotConst.isEmptyRow(rowNum)) {
-        let eachItemObj : any = JSON.parse(JSON.stringify(hotConst.getSourceDataAtRow(rowNum)));
+        let eachItemObj: any = JSON.parse(JSON.stringify(hotConst.getSourceDataAtRow(rowNum)));
         eachItemObj.tags = eachItemObj.tags == '' ? [] : eachItemObj.tags.split(',')
         itemPostArr.push(eachItemObj);
         for (let columnNum = 0; columnNum < this.colHeaders.length; columnNum++) {
@@ -197,13 +204,13 @@ export class BulkuploadComponent implements OnInit {
 
     this.bulkUploadService.uploadItemsInBulk(shopId, itemPostArr).subscribe((data: any) => {
       this.saving = false;
-      if(data.success){
+      if (data.success) {
         let snackBarRef = this.snackBar.open(data.message, 'OK');
         this.instatiateEmptyData();
       } else {
         let snackBarRef = this.snackBar.open(data.message, 'OK');
       }
-    }, (err : any) => {
+    }, (err: any) => {
       let snackBarRef = this.snackBar.open('Error in saving items', 'OK');
     })
   }

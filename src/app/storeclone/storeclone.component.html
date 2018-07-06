@@ -13,8 +13,8 @@
       <div class="col-md-5">
         <mat-form-field>
           <mat-select placeholder="Source Store" [(ngModel)]="sourceStore">
-            <mat-option *ngFor="let store of stores" [value]="store.value">
-              {{store.viewValue}}
+            <mat-option *ngFor="let store of stores" [value]="store.shopId">
+                {{store.shopName + ' ' + store.shopAddress}}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -25,8 +25,8 @@
       <div class="col-md-5">
         <mat-form-field>
           <mat-select placeholder="Target Store" [(ngModel)]="targetStore">
-            <mat-option *ngFor="let store of stores" [value]="store.value">
-              {{store.viewValue}}
+            <mat-option *ngFor="let store of stores" [value]="store.shopId">
+                {{store.shopName + ' ' + store.shopAddress}}
             </mat-option>
           </mat-select>
         </mat-form-field>

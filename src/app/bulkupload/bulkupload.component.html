@@ -4,9 +4,20 @@
       Items Bulk Upload
     </h3>
     <div class="row">
-      <button style="background-color:#f44336; color:white; margin-left: 1%" mat-raised-button (click)="saveData()">Save</button>
-      <button mat-raised-button>Clear</button>
-      <button mat-raised-button (click)="openErrorDialog()" [disabled]="errMsgs.length==0">Errors</button>
+      <div class="col-md-6">
+        <button style="background-color:#f44336; color:white; margin-left: 1%" mat-raised-button (click)="saveData()">Save</button>
+        <button mat-raised-button>Clear</button>
+        <button mat-raised-button (click)="openErrorDialog()" [disabled]="errMsgs.length==0">Errors</button>
+      </div>
+      <div class="col-md-6">
+        <mat-form-field>
+          <mat-select placeholder="Select Store" [(ngModel)]="selectedShopId">
+            <mat-option *ngFor="let store of stores" [value]="store.shopId">
+                {{store.shopName + ' ' + store.shopAddress}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
     <!-- <hot-table [hotId]="instance" [data]="data" [columns]="columns" [colHeaders]="colHeaders" [colWidths]="colWidths" [settings]="options" (HANDSONTABLE_EVENT)="eventHandler">
     </hot-table> -->
@@ -14,8 +25,7 @@
       mode="indeterminate"></mat-progress-bar>
     <mat-divider *ngIf="!saving" style="margin-bottom: 2%;margin-top: 2%;"></mat-divider>
     <div style="font-size: 0.8rem;">
-      <hot-table [hotId]="instance" [data]="dataset" [settings]="options" [outsideClickDeselects]="false"
-        [rowHeaders]="true" [colHeaders]="colHeaders"></hot-table>
+      <hot-table [hotId]="instance" [data]="dataset" [settings]="options" [outsideClickDeselects]="false" [rowHeaders]="true" [colHeaders]="colHeaders"></hot-table>
     </div>
   </div>
 </div>

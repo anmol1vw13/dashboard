@@ -6,6 +6,7 @@ import { ComboItem, ComboOption, Parameter } from './comboitem.model';
 import { Input } from '@angular/core'
 import { IActionMapping } from 'angular-tree-component';
 import { ComboitemService } from './comboitem.service';
+import { AdminLayoutService } from '../layouts/admin-layout/admin-layout.service';
 
 
 
@@ -18,7 +19,7 @@ import { ComboitemService } from './comboitem.service';
 })
 export class ComboitemComponent implements OnInit {
 
-  constructor(public dialog: MatDialog, public snackBar: MatSnackBar, private _comboitemservice: ComboitemService) {
+  constructor(public dialog: MatDialog, public snackBar: MatSnackBar, private _comboitemservice: ComboitemService, public _adminLayoutService : AdminLayoutService) {
 
   }
   addItemShow = true;
@@ -26,18 +27,29 @@ export class ComboitemComponent implements OnInit {
   selectedParentProp = null;
   props = [];
   @Input('properties') properties: any;
+  @Input('shopId') shopId: any;
   loading: boolean = false;
+  stores : any[] = [];
+  selectedShopId : any = '';
+  editComboFromPresentation : boolean = false;
 
   ngOnInit() {
     this.addItemShow = true;
     this.addOptionShow = false;
     this.props = [];
+    this.stores = this._adminLayoutService.getListOfStores();
+    if(this.stores != null){
+      this.selectedShopId = this.stores[0].shopId;
+    }
     console.log(this.properties);
     if (this.properties != undefined && this.properties.length > 0) {
       this.props = this.properties;
       this.selectedProp(this.props[0]);
+      this.selectedShopId = this.shopId;
+      this.editComboFromPresentation = true;
     }
   }
+
 
   actionMapping: IActionMapping = {
     mouse: {
@@ -179,7 +191,7 @@ export class ComboitemComponent implements OnInit {
       this.loading = true;
       this.convertPropsChildren(this.props);
       console.log(this.props);
-      this._comboitemservice.addNestedItem(this.props[0], 407).subscribe(data => {
+      this._comboitemservice.addNestedItem(this.props[0], this.selectedShopId).subscribe(data => {
         this.loading = false;
         this.snackBar.open('Saved Successfully', 'OK');
       }, (err) => {
@@ -266,7 +278,7 @@ export class ComboitemComponent implements OnInit {
   template: `<button style="margin-left:95%; margin-bottom:1%;" mat-icon-button [mat-dialog-close]="true">
   <mat-icon>close</mat-icon>
   </button>
-  <app-comboitem [properties]="props"></app-comboitem>`,
+  <app-comboitem [properties]="props" [shopId]="shopId"></app-comboitem>`,
   styleUrls: ['./comboitem.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
@@ -278,6 +290,7 @@ export class ComboItemModalComponent implements OnInit {
   }
 
   props = [];
+  shopId : any = '';
 
   getNestedChildren(items) {
     for (let eachItem of items) {
@@ -308,6 +321,7 @@ export class ComboItemModalComponent implements OnInit {
     this.dialogRef.updateSize('80%', '80%');
     this.dialogRef.disableClose = true;
     if (this.data !== undefined || this.data !== null) {
+      this.shopId = this.data.shopId;
       this.data.item.selfId = this.data.item.id;
       this.data.item.expanded = true;
       if (this.data.item.options !== undefined && this.data.item.options !== null && this.data.item.options.length > 0) {

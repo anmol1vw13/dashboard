@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { StoreCloneService } from './storeclone.service';
+import { AdminLayoutService } from '../layouts/admin-layout/admin-layout.service';
 
 @Component({
   selector: 'app-storeclone',
@@ -10,18 +11,15 @@ import { StoreCloneService } from './storeclone.service';
 })
 export class StorecloneComponent implements OnInit {
 
-  constructor(public snackbar : MatSnackBar, public storeCloneService : StoreCloneService) { }
+  constructor(public snackbar : MatSnackBar, public storeCloneService : StoreCloneService, private _adminLayoutService : AdminLayoutService) { }
 
-  stores: any[] = [
-    {value: '407', viewValue: 'KFC Indiranagar'},
-    {value: '411', viewValue: 'KFC Koramangala'},
-  ];
-
+  stores : any[] = [];
   sourceStore : any = '';
   targetStore : any = '';
   loading : boolean = false;
 
   ngOnInit() {
+    this.stores = this._adminLayoutService.getListOfStores();
   }
 
   startCopying(){

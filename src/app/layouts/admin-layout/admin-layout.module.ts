@@ -45,6 +45,7 @@ import { BulkuploadComponent, ErrorDialog } from '../../bulkupload/bulkupload.co
 import { ComboitemComponent, ItemComponent, OptionComponent, ComboItemModalComponent } from '../../comboitem/comboitem.component';
 import { TreeModule } from 'angular-tree-component';
 import { SortablejsModule } from 'angular-sortablejs/dist';
+import { AdminLayoutService } from './admin-layout.service';
 
 @NgModule({
   imports: [
@@ -100,6 +101,7 @@ import { SortablejsModule } from 'angular-sortablejs/dist';
     ComboItemModalComponent,
     StorecloneComponent
   ],
+  providers:[AdminLayoutService]
 })
 
 export class AdminLayoutModule {}

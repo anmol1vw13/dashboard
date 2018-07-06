@@ -3,10 +3,23 @@
     <h3>
       <u>Item Presentations</u>
     </h3>
-    <button mat-fab color="primary" style="margin-left: 1%; margin-bottom: 1%" matTooltip="Create Presentation" (click)="createPresentation()">+</button>
-    <button mat-raised-button color="primary" style="margin-left: 1%; margin-bottom: 1%" matTooltip="Sort Items Order" (click)="sorting=!sorting">Reorder List</button>
-    <button *ngIf="sorting" mat-raised-button color="primary" style="margin-left: 1%; margin-bottom: 1%" matTooltip="Save Order"
-      (click)="saveOrder()">Save Ordering</button>
+    <div class="row">
+      <div class="col-md-6">
+        <button mat-fab color="primary" style="margin-left: 1%; margin-bottom: 1%" matTooltip="Create Presentation" (click)="createPresentation()">+</button>
+        <button mat-raised-button color="primary" style="margin-left: 1%; margin-bottom: 1%" matTooltip="Sort Items Order" (click)="sorting=!sorting">Reorder List</button>
+        <button *ngIf="sorting" mat-raised-button color="primary" style="margin-left: 1%; margin-bottom: 1%" matTooltip="Save Order"
+          (click)="saveOrder()">Save Ordering</button>
+      </div>
+      <div class="col-md-6">
+        <mat-form-field>
+          <mat-select placeholder="Select Store" [(ngModel)]="selectedShopId" (change)="getPresentations()">
+            <mat-option *ngFor="let store of stores" [value]="store.shopId">
+              {{store.shopName + ' ' + store.shopAddress}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
 
     <mat-progress-bar style="position: sticky;top:0;align-self: flex-start;" *ngIf="loading" style="margin-bottom: 2%;margin-top: 2%;"
       mode="indeterminate"></mat-progress-bar>

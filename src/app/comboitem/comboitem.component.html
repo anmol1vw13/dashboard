@@ -4,22 +4,40 @@
     <mat-card>
       <mat-card-title>Create Combo Item</mat-card-title>
       <mat-card-content>
-        <div style="margin-bottom: 5%">
-          <ng-container *ngIf="addItemShow">
-            <button mat-flat-button (click)="openItemDialog(false)">Add Item</button>
-          </ng-container>
-          <ng-container *ngIf="addOptionShow">
-            <button mat-flat-button (click)="openOptionDialog(false)">Add Option</button>
-          </ng-container>
-          <ng-container *ngIf="selectedParentProp && addItemShow">
-            <button mat-flat-button (click)="removeItemOrOption()" style="float:right;">Remove Option</button>
-            <button mat-flat-button (click)="openOptionDialog(true)">Edit Option</button>
-          </ng-container>
-          <ng-container *ngIf="selectedParentProp && addOptionShow">
-            <button mat-flat-button (click)="removeItemOrOption()" style="float:right;">Remove Item</button>
-            <button mat-flat-button (click)="openItemDialog(true)">Edit Item</button>
-            <mat-checkbox style="margin-left: 3%" [(ngModel)]="selectedParentProp.defaultItem" (change)="addStyle(selectedParentProp)">Set as Default Item</mat-checkbox>
-          </ng-container>
+        <div class="row" style="margin-bottom: 5%">
+
+          <div class="col-md-4">
+            <ng-container *ngIf="addItemShow">
+              <button mat-flat-button (click)="openItemDialog(false)">Add Item</button>
+            </ng-container>
+            <ng-container *ngIf="addOptionShow">
+              <button mat-flat-button (click)="openOptionDialog(false)">Add Option</button>
+            </ng-container>
+            <ng-container *ngIf="selectedParentProp && addItemShow">
+              <button mat-flat-button (click)="openOptionDialog(true)">Edit Option</button>
+            </ng-container>
+            <ng-container *ngIf="selectedParentProp && addOptionShow">
+              <button mat-flat-button (click)="openItemDialog(true)">Edit Item</button>
+              <mat-checkbox style="margin-left: 3%" [(ngModel)]="selectedParentProp.defaultItem" (change)="addStyle(selectedParentProp)">Set as Default Item</mat-checkbox>
+            </ng-container>
+          </div>
+          <div class="col-md-4">
+            <mat-form-field>
+              <mat-select placeholder="Select Store" [(ngModel)]="selectedShopId" [disabled]="editComboFromPresentation">
+                <mat-option *ngFor="let store of stores" [value]="store.shopId">
+                    {{store.shopName + ' ' + store.shopAddress}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-4">
+            <ng-container *ngIf="selectedParentProp && addItemShow">
+              <button mat-flat-button (click)="removeItemOrOption()" style="float:right;">Remove Option</button>
+            </ng-container>
+            <ng-container *ngIf="selectedParentProp && addOptionShow">
+              <button mat-flat-button (click)="removeItemOrOption()" style="float:right;">Remove Item</button>
+            </ng-container>
+          </div>
         </div>
 
         <div class="row" style="overflow-x: scroll">

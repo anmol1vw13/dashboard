@@ -3,6 +3,7 @@ import { PresentationsService } from './presentations.service';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource, MatSnackBar } from '@angular/material';
 import { CatalogueSearchRequest } from './presentation.model';
 import { ComboItemModalComponent } from '../comboitem/comboitem.component';
+import { AdminLayoutService } from '../layouts/admin-layout/admin-layout.service';
 
 
 let shopId: number = 407;
@@ -20,12 +21,23 @@ export class PresentationsComponent implements OnInit {
   presentations = []
   selectedRowIndexes = []
   sorting: boolean = false;
+  stores : any[] = [];
+  selectedShopId : any = '';
   // @ViewChild(MatTable) table: MatTable<any>;
-  constructor(private _presentationService: PresentationsService, private _changeDetectorRef: ChangeDetectorRef, public dialog: MatDialog, public snackBar: MatSnackBar) {
+  constructor(private _presentationService: PresentationsService, private _changeDetectorRef: ChangeDetectorRef, public dialog: MatDialog, public snackBar: MatSnackBar, public adminLayoutService : AdminLayoutService) {
 
   }
 
   ngOnInit() {
+    this.getStores();
+  }
+
+  getStores(){
+    this.stores = this.adminLayoutService.getListOfStores();
+    console.log(this.stores);
+    if(this.stores != null){
+      this.selectedShopId = this.stores[0].shopId;
+    }
     this.getPresentations();
   }
 
@@ -34,7 +46,7 @@ export class PresentationsComponent implements OnInit {
     let addDialogPresentation = this.dialog.open(AddItemToPresentation, {
       height: '75%',
       width: '50%',
-      data: { presentation: presentation, itemPresentationIndex: itemPresentationIndex }
+      data: { presentation: presentation, itemPresentationIndex: itemPresentationIndex, shopId : this.selectedShopId }
     });
     addDialogPresentation.afterClosed().subscribe((data) => {
       if (data !== undefined && data !== null) {
@@ -54,7 +66,7 @@ export class PresentationsComponent implements OnInit {
 
   getPresentations() {
     this.loading = true;
-    this._presentationService.getPresentations(shopId).subscribe((data: any) => {
+    this._presentationService.getPresentations(this.selectedShopId).subscribe((data: any) => {
       this.loading = false;
       this.presentations = data;
     })
@@ -75,7 +87,8 @@ export class PresentationsComponent implements OnInit {
     let items = item;
     let dialogRef = this.dialog.open(ComboItemModalComponent, {
       data: {
-        item: items
+        item: items,
+        shopId : this.selectedShopId
       }
     });
   }
@@ -123,7 +136,7 @@ export class PresentationsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result != undefined && result != null) {
         console.log(result);
-        let presentation = { name: result.name, description: result.description, shopId: shopId, type: result.presentationType, itemPresentations: [] };
+        let presentation = { name: result.name, description: result.description, shopId: this.selectedShopId, type: result.presentationType, itemPresentations: [] };
         presentation.itemPresentations.push({ type: result.itemPresentationType });
         this.loading = true;
         this._presentationService.addPresentation(presentation).subscribe((data) => {
@@ -216,7 +229,7 @@ export class AddItemToPresentation implements OnInit {
       this.items = []
       return;
     }
-    let request: CatalogueSearchRequest = { 'shopId': shopId.toString(), "name": searchParam }
+    let request: CatalogueSearchRequest = { 'shopId': this.data.shopId.toString(), "name": searchParam }
 
     this.loading = true;
     let searchObservable = this._presentationsService.searchItem(request).subscribe(response => {
