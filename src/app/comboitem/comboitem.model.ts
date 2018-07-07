@@ -29,6 +29,7 @@ export class ComboOption{
     items:Array<Object>=[];
     expanded:boolean=true;
     active:boolean;
+    selectionCriteria : number;
 }
 
 export class Parameter{
