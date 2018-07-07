@@ -21,12 +21,9 @@ export class PresentationsComponent implements OnInit {
   presentations = []
   selectedRowIndexes = []
   sorting: boolean = false;
-<<<<<<< Updated upstream
   stores : any[] = [];
   selectedShopId : any = '';
-=======
   reorder_list_button_name = "Reorder presentations"
->>>>>>> Stashed changes
   // @ViewChild(MatTable) table: MatTable<any>;
   constructor(private _presentationService: PresentationsService, private _changeDetectorRef: ChangeDetectorRef, public dialog: MatDialog, public snackBar: MatSnackBar, public adminLayoutService : AdminLayoutService) {
 
