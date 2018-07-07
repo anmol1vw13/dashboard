@@ -30,7 +30,6 @@ export class ComboOption{
     expanded:boolean=true;
     selectionCriteria:number;
     active:boolean;
-    selectionCriteria : number;
 }
 
 export class Parameter{
