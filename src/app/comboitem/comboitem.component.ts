@@ -19,7 +19,7 @@ import { AdminLayoutService } from '../layouts/admin-layout/admin-layout.service
 })
 export class ComboitemComponent implements OnInit {
 
-  constructor(public dialog: MatDialog, public snackBar: MatSnackBar, private _comboitemservice: ComboitemService, public _adminLayoutService : AdminLayoutService) {
+  constructor(public dialog: MatDialog, public snackBar: MatSnackBar, private _comboitemservice: ComboitemService, public _adminLayoutService: AdminLayoutService) {
 
   }
   addItemShow = true;
@@ -29,16 +29,16 @@ export class ComboitemComponent implements OnInit {
   @Input('properties') properties: any;
   @Input('shopId') shopId: any;
   loading: boolean = false;
-  stores : any[] = [];
-  selectedShopId : any = '';
-  editComboFromPresentation : boolean = false;
+  stores: any[] = [];
+  selectedShopId: any = '';
+  editComboFromPresentation: boolean = false;
 
   ngOnInit() {
     this.addItemShow = true;
     this.addOptionShow = false;
     this.props = [];
     this.stores = this._adminLayoutService.getListOfStores();
-    if(this.stores != null){
+    if (this.stores != null) {
       this.selectedShopId = this.stores[0].shopId;
     }
     console.log(this.properties);
@@ -137,6 +137,7 @@ export class ComboitemComponent implements OnInit {
           if (edit) {
             this.selectedParentProp.name = data.name;
             this.selectedParentProp.active = data.active;
+            this.selectedParentProp.selectionCriteria = data.selectionCriteria;
             this.addStyle(this.selectedParentProp);
           } else {
             this.addToProps(data);
@@ -204,7 +205,52 @@ export class ComboitemComponent implements OnInit {
   validateProps() {
     let checkStatus = false;
     checkStatus = this.checkIfOptionHasItem(this.props[0], true);
-    return checkStatus
+    let sumStatus = false;
+    sumStatus = this.checkIfSumMatches(this.props[0], this.props[0].basePrice, true)
+    return checkStatus && sumStatus;
+  }
+
+  checkIfSumMatches(parent, basePrice, status) {
+
+    if (parent.children.length < 1) {
+      return true;
+    }
+
+    for (let eachChildrenIndex = 0; eachChildrenIndex < parent.children.length; eachChildrenIndex++) {
+      if (parent.children[eachChildrenIndex].type === 'OPTION') {
+        let sum = 0;
+        let found = 0;
+        for (let eachItemIndex = 0; eachItemIndex < parent.children[eachChildrenIndex].children.length; eachItemIndex++) {
+          if (parent.children[eachChildrenIndex].children[eachItemIndex].defaultItem) {
+            found++;
+            sum += parent.children[eachChildrenIndex].children[eachItemIndex].basePrice;
+          }
+        }
+        if (found < parent.children[eachChildrenIndex].selectionCriteria) {
+          for (let eachItemIndex = 0; eachItemIndex < parent.children[eachChildrenIndex].selectionCriteria && eachItemIndex < parent.children[eachChildrenIndex].children.length; eachItemIndex++) {
+            if (!parent.children[eachChildrenIndex].children[eachItemIndex].defaultItem) {
+              sum += parent.children[eachChildrenIndex].children[eachItemIndex].basePrice;
+            }
+          }
+        }
+        if (sum > basePrice) {
+          let snackBarRef = this.snackBar.open('Parent Item Base Price cannot be lesser than child base price. Please check the sum of default items under the option : " ' + parent.children[eachChildrenIndex].name + ' "', 'OK');
+          status = false;
+          return status;
+        }
+        status = this.checkIfSumMatches(parent.children[eachChildrenIndex], basePrice, status);
+      } else if (parent.children[eachChildrenIndex].type === 'ITEM') {
+
+        status = this.checkIfSumMatches(parent.children[eachChildrenIndex], parent.children[eachChildrenIndex].basePrice, status);
+
+      }
+      if (!status) {
+        return status;
+      }
+    }
+
+    return status;
+
   }
 
   checkIfOptionHasItem(parent, status) {
@@ -290,7 +336,7 @@ export class ComboItemModalComponent implements OnInit {
   }
 
   props = [];
-  shopId : any = '';
+  shopId: any = '';
 
   getNestedChildren(items) {
     for (let eachItem of items) {
@@ -508,6 +554,7 @@ export class OptionComponent implements OnInit {
   createForm() {
     this.optionForm = this.formBuilder.group({
       name: ['', Validators.required],
+      selectionCriteria: [],
       active: [true]
     })
   }
@@ -516,7 +563,8 @@ export class OptionComponent implements OnInit {
     this.createForm();
     this.optionForm.setValue({
       name: this.data.selectedParentProp.name,
-      active: this.data.selectedParentProp.active
+      active: this.data.selectedParentProp.active,
+      selectionCriteria: this.data.selectedParentProp.selectionCriteria
     })
   }
 
@@ -527,6 +575,7 @@ export class OptionComponent implements OnInit {
     option.type = 'OPTION';
     option.selfId = UUID.UUID();
     option.active = this.optionForm.get('active').value;
+    option.selectionCriteria = this.optionForm.get('selectionCriteria').value;
     if (this.data.selectedParentProp != null) {
       option.parentId = this.data.selectedParentProp.selfId;
     }
