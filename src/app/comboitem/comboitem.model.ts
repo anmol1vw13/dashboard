@@ -28,6 +28,7 @@ export class ComboOption{
     children:Array<Object>;
     items:Array<Object>=[];
     expanded:boolean=true;
+    selectionCriteria:number;
     active:boolean;
 }
 

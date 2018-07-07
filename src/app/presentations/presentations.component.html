@@ -1,14 +1,14 @@
 <div class="main-content">
   <div class="container-fluid">
     <h3>
-      <u>Item Presentations</u>
+      <u>Presentations</u>
     </h3>
     <div class="row">
       <div class="col-md-6">
-        <button mat-fab color="primary" style="margin-left: 1%; margin-bottom: 1%" matTooltip="Create Presentation" (click)="createPresentation()">+</button>
-        <button mat-raised-button color="primary" style="margin-left: 1%; margin-bottom: 1%" matTooltip="Sort Items Order" (click)="sorting=!sorting">Reorder List</button>
-        <button *ngIf="sorting" mat-raised-button color="primary" style="margin-left: 1%; margin-bottom: 1%" matTooltip="Save Order"
-          (click)="saveOrder()">Save Ordering</button>
+          <button mat-fab color="primary" style="margin-left: 1%; margin-bottom: 1%" matTooltip="Create Presentation" (click)="createPresentation()">+</button>
+          <button mat-raised-button color="primary" style="margin-left: 1%; margin-bottom: 1%"  (click)="updateSorting()">{{reorder_list_button_name}}</button>
+          <button *ngIf="sorting" mat-raised-button color="primary" style="margin-left: 1%; margin-bottom: 1%"
+            (click)="saveOrder()">Save Ordering</button>  
       </div>
       <div class="col-md-6">
         <mat-form-field>

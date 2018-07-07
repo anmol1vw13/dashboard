@@ -21,8 +21,12 @@ export class PresentationsComponent implements OnInit {
   presentations = []
   selectedRowIndexes = []
   sorting: boolean = false;
+<<<<<<< Updated upstream
   stores : any[] = [];
   selectedShopId : any = '';
+=======
+  reorder_list_button_name = "Reorder presentations"
+>>>>>>> Stashed changes
   // @ViewChild(MatTable) table: MatTable<any>;
   constructor(private _presentationService: PresentationsService, private _changeDetectorRef: ChangeDetectorRef, public dialog: MatDialog, public snackBar: MatSnackBar, public adminLayoutService : AdminLayoutService) {
 
@@ -41,7 +45,14 @@ export class PresentationsComponent implements OnInit {
     this.getPresentations();
   }
 
-
+  updateSorting(){
+    this.sorting=!this.sorting;
+    if(this.sorting == true){
+      this.reorder_list_button_name = "Back to original view"
+    }else{
+      this.reorder_list_button_name = "Reorder List"
+    }
+  }
   openDialog(presentation, itemPresentationIndex) {
     let addDialogPresentation = this.dialog.open(AddItemToPresentation, {
       height: '75%',
